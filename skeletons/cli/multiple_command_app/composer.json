@@ -1,0 +1,11 @@
+{
+   "minimum-stability": "alpha",
+   "require": {
+       "hyperframework/hyperframework": "*"
+   },
+   "autoload": {
+        "psr-4": {
+            "": "lib"
+        }
+    }
+}

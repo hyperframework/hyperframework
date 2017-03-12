@@ -1,0 +1,15 @@
+<phpunit
+    bootstrap="bootstrap.php"
+    colors="true"
+    strict="true"
+    verbose="true">
+    <testsuites>
+        <testsuite>
+            <directory>cli/tests</directory>
+            <directory>common/tests</directory>
+            <directory>db/tests</directory>
+            <directory>logging/tests</directory>
+            <directory>web/tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
