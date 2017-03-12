@@ -4,7 +4,7 @@ namespace Hyperframework\Logging;
 use Hyperframework\Common\Config;
 use Hyperframework\Common\FileAppender;
 
-class FileLogHandler extends FormattedLogHandler {
+class FileLogHandler extends FormattingLogHandler {
     private $path;
 
     /**

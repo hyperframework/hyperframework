@@ -1,7 +1,7 @@
 <?php
 namespace Hyperframework\Logging;
 
-class ConsoleLogHandler extends FormattedLogHandler {
+class ConsoleLogHandler extends FormattingLogHandler {
     /**
      * @param string $log
      * @return void

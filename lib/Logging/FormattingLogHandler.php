@@ -3,7 +3,7 @@ namespace Hyperframework\Logging;
 
 use Hyperframework\Common\Config;
 
-abstract class FormattedLogHandler extends LogHandler {
+abstract class FormattingLogHandler extends LogHandler {
     private $formatter;
 
     /**
