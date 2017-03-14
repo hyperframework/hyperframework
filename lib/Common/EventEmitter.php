@@ -33,8 +33,8 @@ class EventEmitter {
      */
     public static function bindAll($bindings) {
         $engine = static::getEngine();
-        foreach ($bindings as $binding) {
-            $engine->bind($binding['name'], $binding['callback']);
+        foreach ($bindings as $name => $callback) {
+            $engine->bind($name, $callback);
         }
     }
 
@@ -53,8 +53,8 @@ class EventEmitter {
      */
     public static function unbindAll($bindings) {
         $engine = static::getEngine();
-        foreach ($bindings as $binding) {
-            $engine->unbind($binding['name'], $binding['callback']);
+        foreach ($bindings as $name => $callback) {
+            $engine->unbind($name, $callback);
         }
     }
 

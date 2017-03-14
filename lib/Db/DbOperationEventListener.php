@@ -1,33 +1,24 @@
 <?php
 namespace Hyperframework\Db;
 
-use Hyperframework\Common\EventEmitter;
-
 abstract class DbOperationEventListener {
     /**
      * @return array
      */
     public function getEventBindings() {
         return [
-            [
-                'name' => 'hyperframework.db.transaction_operation_executing',
-                'callback' => [$this, 'onTransactionOperationExecuting']
-            ], [
-                'name' => 'hyperframework.db.transaction_operation_executed',
-                'callback' => [$this, 'onTransactionOperationExecuted']
-            ], [
-                'name' => 'hyperframework.db.sql_statement_executing',
-                'callback' => [$this, 'onSqlStatementExecuting']
-            ], [
-                'name' => 'hyperframework.db.sql_statement_executed',
-                'callback' => [$this, 'onSqlStatementExecuted']
-            ], [
-                'name' => 'hyperframework.db.prepared_statement_executing',
-                'callback' => [$this, 'onPreparedStatementExecuting']
-            ], [
-                'name' => 'hyperframework.db.prepared_statement_executed',
-                'callback' => [$this, 'onPreparedStatementExecuted']
-            ]
+            'hyperframework.db.transaction_operation_executing'
+                => [$this, 'onTransactionOperationExecuting'],
+            'hyperframework.db.transaction_operation_executed'
+                => [$this, 'onTransactionOperationExecuted'],
+            'hyperframework.db.sql_statement_executing'
+                => [$this, 'onSqlStatementExecuting'],
+            'hyperframework.db.sql_statement_executed'
+                => [$this, 'onSqlStatementExecuted'],
+            'hyperframework.db.prepared_statement_executing'
+                => [$this, 'onPreparedStatementExecuting'],
+            'hyperframework.db.prepared_statement_executed'
+                => [$this, 'onPreparedStatementExecuted']
         ];
     }
 
