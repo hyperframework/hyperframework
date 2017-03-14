@@ -3,6 +3,22 @@ namespace Hyperframework\Common;
 
 class EventEmitter {
     /**
+     * @param object $listener
+     * @return void
+     */
+    public static function addListener($listener) {
+        static::bindAll($listener->getEventBindings());
+    }
+
+    /**
+     * @param object $listener
+     * @return void
+     */
+    public static function removeListener($listener) {
+        static::unbindAll($listener->getEventBindings());
+    }
+
+    /**
      * @param string $name
      * @param callable $callback
      * @return void
@@ -20,14 +36,6 @@ class EventEmitter {
         foreach ($bindings as $binding) {
             $engine->bind($binding['name'], $binding['callback']);
         }
-    }
-
-    /**
-     * @param object $listener
-     * @return void
-     */
-    public static function addListener($listener) {
-        static::bindAll($listener->getEventBindings());
     }
 
     /**
