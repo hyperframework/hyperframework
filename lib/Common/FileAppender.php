@@ -27,6 +27,6 @@ class FileAppender {
      * @return void
      */
     public static function appendLine($path, $data) {
-        $this->append($path, $data . PHP_EOL);
+        static::append($path, $data . PHP_EOL);
     }
 }
