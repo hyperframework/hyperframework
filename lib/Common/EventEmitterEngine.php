@@ -17,16 +17,6 @@ class EventEmitterEngine {
     }
 
     /**
-     * @param array $bindings
-     * @return void
-     */
-    public function bindAll($bindings) {
-        foreach ($bindings as $binding) {
-            $this->bind($binding['name'], $binding['callback']);
-        }
-    }
-
-    /**
      * @param string $name
      * @param callable $callback
      * @return void
@@ -40,16 +30,6 @@ class EventEmitterEngine {
                     unset($this->callbacks[$name]);
                 }
             }
-        }
-    }
-
-    /**
-     * @param array $bindings
-     * @return void
-     */
-    public function unbindAll($bindings) {
-        foreach ($bindings as $binding) {
-            $this->unbind($binding['name'], $binding['callback']);
         }
     }
 

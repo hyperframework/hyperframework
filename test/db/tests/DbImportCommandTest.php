@@ -3,6 +3,7 @@ namespace Hyperframework\Db;
 
 use Hyperframework\Common\Config;
 use Hyperframework\Db\Test\TestCase as Base;
+use Hyperframework\Common\EventEmitter;
 
 class DbImportCommandTest extends Base {
     protected function tearDown() {
@@ -26,7 +27,7 @@ class DbImportCommandTest extends Base {
         ])->getMock();
         $mock->expects($this->exactly(2))->method('onPreparedStatementExecuting');
         $mock->expects($this->exactly(2))->method('onPreparedStatementExecuted');
-        $mock->run();
+        EventEmitter::addListener($mock);
         DbImportCommand::execute(
             'Document',
             [[1, 'doc 1', 12.34], [2, 'doc 2', 0]],

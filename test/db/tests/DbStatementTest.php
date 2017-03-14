@@ -3,6 +3,7 @@ namespace Hyperframework\Db;
 
 use Hyperframework\Common\Config;
 use Hyperframework\Db\Test\TestCase as Base;
+use Hyperframework\Common\EventEmitter;
 
 class DbStatementTest extends Base {
     public function testExecute() {
@@ -31,6 +32,6 @@ class DbStatementTest extends Base {
         ])->getMock();
         $mock->expects($this->once())->method('onPreparedStatementExecuting');
         $mock->expects($this->once())->method('onPreparedStatementExecuted');
-        $mock->run();
+        EventEmitter::addListener($mock);
     }
 }

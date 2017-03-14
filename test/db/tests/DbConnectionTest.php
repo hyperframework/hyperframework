@@ -3,6 +3,7 @@ namespace Hyperframework\Db;
 
 use PDO;
 use Hyperframework\Common\Config;
+use Hyperframework\Common\EventEmitter;
 use Hyperframework\Db\Test\TestCase as Base;
 
 class DbConnectionTest extends Base {
@@ -64,7 +65,7 @@ class DbConnectionTest extends Base {
         ])->getMock();
         $mock->expects($this->once())->method('onTransactionOperationExecuting');
         $mock->expects($this->once())->method('onTransactionOperationExecuted');
-        $mock->run();
+        EventEmitter::addListener($mock);
     }
 
     public function testQuoteIdentifier() {

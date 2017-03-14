@@ -16,7 +16,18 @@ class EventEmitter {
      * @return void
      */
     public static function bindAll($bindings) {
-        static::getEngine()->bindAll($bindings);
+        $engine = static::getEngine();
+        foreach ($bindings as $binding) {
+            $engine->bind($binding['name'], $binding['callback']);
+        }
+    }
+
+    /**
+     * @param object $listener
+     * @return void
+     */
+    public static function addListener($listener) {
+        static::bindAll($listener->getEventBindings());
     }
 
     /**
@@ -33,7 +44,10 @@ class EventEmitter {
      * @return void
      */
     public static function unbindAll($bindings) {
-        static::getEngine()->unbindAll($bindings);
+        $engine = static::getEngine();
+        foreach ($bindings as $binding) {
+            $engine->unbind($binding['name'], $binding['callback']);
+        }
     }
 
     /**

@@ -4,8 +4,11 @@ namespace Hyperframework\Db;
 use Hyperframework\Common\EventEmitter;
 
 abstract class DbOperationEventListener {
-    public function run()  {
-        EventEmitter::bindAll([
+    /**
+     * @return array
+     */
+    public function getEventBindings() {
+        return [
             [
                 'name' => 'hyperframework.db.transaction_operation_executing',
                 'callback' => [$this, 'onTransactionOperationExecuting']
@@ -25,7 +28,7 @@ abstract class DbOperationEventListener {
                 'name' => 'hyperframework.db.prepared_statement_executed',
                 'callback' => [$this, 'onPreparedStatementExecuted']
             ]
-        ]);
+        ];
     }
 
     /**
