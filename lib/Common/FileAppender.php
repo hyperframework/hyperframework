@@ -5,48 +5,28 @@ use RuntimeException;
 
 class FileAppender {
     /**
+     * @param string $path
      * @param string $data
      * @return void
      */
-    public function append($data) {
-        FileLock::run(
-            $this->getPath(),
-            'a',
-            LOCK_EX,
-            function($handle) use ($data) {
-                $status = fwrite($handle, $data);
-                if ($status !== false) {
-                    $status = fflush($handle);
-                }
-                if ($status !== true) {
-                    throw new RuntimeException(
-                        "Failed to append file '{$this->getPath()}'."
-                    );
-                }
+    public static function append($path, $data) {
+        FileLock::run($path, 'a', LOCK_EX, function($handle) use ($data) {
+            $status = fwrite($handle, $data);
+            if ($status !== false) {
+                $status = fflush($handle);
             }
-        );
-    }
-
-    /**
-     * @param string $data
-     * @return void
-     */
-    public function appendLine($data) {
-        $this->append($data . PHP_EOL);
+            if ($status !== true) {
+                throw new RuntimeException("Failed to append file '$path'.");
+            }
+        });
     }
 
     /**
      * @param string $path
+     * @param string $data
      * @return void
      */
-    public function setPath($path) {
-        $this->path = $path;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPath() {
-        return $this->path;
+    public static function appendLine($path, $data) {
+        $this->append($path, $data . PHP_EOL);
     }
 }

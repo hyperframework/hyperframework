@@ -8,17 +8,9 @@ class FileLogHandler extends FormattingLogHandler {
     private $path;
 
     /**
-     * @param string $path
-     * @return void
-     */
-    public function setPath($path) {
-        $this->path = $path;
-    }
-
-    /**
      * @return string
      */
-    public function getPath() {
+    protected function getPath() {
         if ($this->path === null) {
             $this->path = Config::getString(
                 $this->getName() . '.path', Config::getString(
@@ -35,8 +27,6 @@ class FileLogHandler extends FormattingLogHandler {
      * @return void
      */
     protected function handleFormattedLog($log) {
-        $appender = new FileAppender;
-        $appender->setPath($this->getPath());
-        $appender->append($log);
+        FileAppender::append($this->getPath(), $log);
     }
 }
