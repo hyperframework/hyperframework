@@ -23,7 +23,7 @@ class DirectoryMaker {
                     return true;
                 }
             } catch (ErrorException $e) {
-                if (is_dir($path) === false) {
+                if (is_dir($fullPath) === false) {
                     throw $e;
                 }
             }
