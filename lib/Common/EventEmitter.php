@@ -7,7 +7,11 @@ class EventEmitter {
      * @return void
      */
     public static function addListener($listener) {
-        static::bindAll($listener->getEventBindings());
+        $engine = static::getEngine();
+        foreach ($listener->getEventBindings() as $name => $method) {
+            $engine->bind($name, [$listener, $method]);
+        }
+
     }
 
     /**
@@ -15,7 +19,10 @@ class EventEmitter {
      * @return void
      */
     public static function removeListener($listener) {
-        static::unbindAll($listener->getEventBindings());
+        $engine = static::getEngine();
+        foreach ($listener->getEventBindings() as $name => $method) {
+            $engine->unbind($name, [$listener, $method]);
+        }
     }
 
     /**

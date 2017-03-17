@@ -8,17 +8,17 @@ abstract class DbOperationEventListener {
     public function getEventBindings() {
         return [
             'hyperframework.db.transaction_operation_executing'
-                => [$this, 'onTransactionOperationExecuting'],
+                => 'onTransactionOperationExecuting',
             'hyperframework.db.transaction_operation_executed'
-                => [$this, 'onTransactionOperationExecuted'],
+                => 'onTransactionOperationExecuted',
             'hyperframework.db.sql_statement_executing'
-                => [$this, 'onSqlStatementExecuting'],
+                => 'onSqlStatementExecuting',
             'hyperframework.db.sql_statement_executed'
-                => [$this, 'onSqlStatementExecuted'],
+                => 'onSqlStatementExecuted',
             'hyperframework.db.prepared_statement_executing'
-                => [$this, 'onPreparedStatementExecuting'],
+                => 'onPreparedStatementExecuting',
             'hyperframework.db.prepared_statement_executed'
-                => [$this, 'onPreparedStatementExecuted']
+                => 'onPreparedStatementExecuted'
         ];
     }
 
