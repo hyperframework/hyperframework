@@ -7,7 +7,7 @@ class DirectoryMaker {
     /**
      * @param string $path
      * @param int $mode
-     * @return bool
+     * @return void
      */
     public static function make($path, $mode = 0755) {
         $fullPath = FileFullPathBuilder::build($path);
@@ -19,8 +19,6 @@ class DirectoryMaker {
                             "Failed to create directory '$fullPath'."
                         );
                     }
-                } else {
-                    return true;
                 }
             } catch (ErrorException $e) {
                 if (is_dir($fullPath) === false) {
@@ -28,6 +26,5 @@ class DirectoryMaker {
                 }
             }
         }
-        return false;
     }
 }
