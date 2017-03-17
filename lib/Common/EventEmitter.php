@@ -11,7 +11,6 @@ class EventEmitter {
         foreach ($listener->getEventBindings() as $name => $method) {
             $engine->bind($name, [$listener, $method]);
         }
-
     }
 
     /**
