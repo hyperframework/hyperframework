@@ -149,7 +149,7 @@ class DbOperationProfiler extends DbOperationEventListener {
             'U.u', $profile['start_time'][1] . '.'
                 . (int)($profile['start_time'][0] * 1000000)
         )->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-        $callback = function() use ($profile) {
+        DbLogger::debug(function() use ($profile) {
             $log = '[DB] | ';
             if (isset($profile['connection_name'])) {
                 $log .= "connection: "
@@ -177,8 +177,7 @@ class DbOperationProfiler extends DbOperationEventListener {
                 $log .= 'transaction: ' . $profile['operation'];
             }
             return $log;
-        };
-        DbLogger::debug($callback);
+        });
         $profileHandler = $this->getProfileHandler();
         if ($profileHandler !== null) {
             $profileHandler->handle($profile);
