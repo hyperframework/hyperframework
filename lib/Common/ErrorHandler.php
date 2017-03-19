@@ -34,10 +34,9 @@ class ErrorHandler {
      */
     protected function writeLog() {
         $logLevel = $this->getLogLevel();
-        $callback = function() {
+        ErrorLogger::log($logLevel, function() {
             return $this->getLog();
-        };
-        ErrorLogger::log($logLevel, $callback);
+        });
     }
 
     /**
