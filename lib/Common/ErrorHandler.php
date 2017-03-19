@@ -33,8 +33,7 @@ class ErrorHandler {
      * @return void
      */
     protected function writeLog() {
-        $logLevel = $this->getLogLevel();
-        ErrorLogger::log($logLevel, function() {
+        ErrorLogger::log($this->getLogLevel(), function() {
             return $this->getLog();
         });
     }
