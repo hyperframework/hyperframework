@@ -14,7 +14,9 @@ class FileLock {
      */
     public static function run($filePath, $fileMode, $lockType, $callback) {
         $fullPath = FileFullPathBuilder::build($filePath);
-        DirectoryMaker::make(dirname($fullPath));
+        if (strpos($fileMode, 'r') === false) {
+            DirectoryMaker::make(dirname($fullPath));
+        }
         $handle = fopen($fullPath, $fileMode);
         if ($handle === false) {
             throw new RuntimeException(
