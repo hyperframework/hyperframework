@@ -125,7 +125,7 @@ class Debugger {
                 echo '<div class="line-number"><div>', $number, '</div></div>';
             }
         }
-        echo '</div></td><td><pre>';
+        echo "</div></td><td><pre>\n";
         foreach ($lines as $number => $line) {
             if ($number === $errorLineNumber) {
                 echo '<span class="error-line">', $line , "\n</span>";
