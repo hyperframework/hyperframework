@@ -465,23 +465,6 @@ class RouterTest extends Base {
         );
     }
 
-    public function testRedirect() {
-        $engine = $this->getMock('Hyperframework\Web\ResponseEngine');
-        $engine->expects($this->once())->method('setHeader')->with(
-            'Location: /', true, 301
-        );
-        $app = $this->getMockBuilder('Hyperframework\Web\App')
-            ->setConstructorArgs([dirname(__DIR__)])->getMock();
-        $app->expects($this->once())->method('quit');
-        Response::setEngine($engine);
-        $this->router = $this->getMockBuilder(
-            'Hyperframework\Web\Test\Router'
-        )->setMethods(['getApp'])
-        ->setConstructorArgs([$app])->disableOriginalConstructor()->getMock();
-        $this->router->expects($this->once())->method('getApp')->willReturn($app);
-        $this->callProtectedMethod($this->router, 'redirect', ['/']);
-    }
-
     private function match($pattern, array $options = []) {
         $args = [$pattern, $options, null];
         return $this->callPrivateMethod($this->router, 'match', $args);

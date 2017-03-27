@@ -5,7 +5,6 @@ use Hyperframework\Common\InvalidOperationException;
 
 abstract class Command {
     private $app;
-    private $isQuitMethodCalled = false;
 
     /**
      * @param App $app
@@ -53,20 +52,5 @@ abstract class Command {
     public function getOptions() {
         $app = $this->getApp();
         return $this->getApp()->getOptions();
-    }
-
-    /**
-     * @return void
-     */
-    public function quit() {
-        if ($this->isQuitMethodCalled) {
-            throw new InvalidOperationException(
-                "The quit method of class '" . __CLASS__
-                    . "' cannot be called more than once."
-            );
-        }
-        $this->isQuitMethodCalled = true;
-        $app = $this->getApp();
-        $app->quit();
     }
 }

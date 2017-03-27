@@ -16,8 +16,12 @@ class App extends Base {
      */
     public static function run($rootPath) {
         $app = static::createApp($rootPath);
-        $app->executeCommand();
-        $app->finalize();
+        try {
+            $app->parseCommand();
+            $app->executeCommand();
+        } catch (CommandParsingException $e) {
+            $this->renderCommandParsingError($e);
+        }
     }
 
     /**
@@ -92,14 +96,6 @@ class App extends Base {
         if (isset($elements['arguments'])) {
             $this->setArguments($elements['arguments']);
         }
-        if ($this->hasOption('help')) {
-            $this->renderHelp();
-            $this->quit();
-        }
-        if ($this->hasOption('version')) {
-            $this->renderVersion();
-            $this->quit();
-        }
     }
 
     /**
@@ -122,6 +118,14 @@ class App extends Base {
      * @return void
      */
     protected function executeCommand() {
+        if ($this->hasOption('help')) {
+            $this->renderHelp();
+            return;
+        }
+        if ($this->hasOption('version')) {
+            $this->renderVersion();
+            return;
+        }
         $commandConfig = $this->getCommandConfig();
         $class = $commandConfig->getClass();
         if (class_exists($class) === false) {
@@ -171,7 +175,6 @@ class App extends Base {
             return $commandParser->parse($commandConfig);
         } catch (CommandParsingException $e) {
             $this->renderCommandParsingError($e);
-            $this->quit();
         }
     }
 

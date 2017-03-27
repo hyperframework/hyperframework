@@ -20,14 +20,13 @@ class AppTest extends Base {
     public function testRun() {
         $app = $this->getMockBuilder('Hyperframework\Web\App')
             ->setConstructorArgs([dirname(__DIR__)])
-            ->setMethods(['createController', 'finalize'])->getMock();
+            ->setMethods(['createController'])->getMock();
         $controller = $this->getMockBuilder(
             'Hyperframework\Web\Test\IndexController'
         )->setConstructorArgs([$app])->getMock();
         $controller->expects($this->once())->method('run');
         $app->expects($this->once())->method('createController')
             ->willReturn($controller);
-        $app->expects($this->once())->method('finalize');
         Registry::set('hyperframework.web.test.app', $app);
         App::run();
     }

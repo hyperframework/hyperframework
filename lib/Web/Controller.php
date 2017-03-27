@@ -15,7 +15,6 @@ abstract class Controller {
     private $filterChain = [];
     private $isFilterChainReversed = false;
     private $isQuitFilterChainMethodCalled = false;
-    private $isQuitMethodCalled = false;
     private $isRunMethodCalled = false;
     private $actionResult;
     private $view;
@@ -47,9 +46,15 @@ abstract class Controller {
         $this->isRunMethodCalled = true;
         $e = null;
         try {
-            $this->runBeforeFilters();
-            $this->handleAction();
-            $this->runAfterFilters();
+            if ($this->isQuitFilterChainMethodCalled === false) {
+                $this->runBeforeFilters();
+            }
+            if ($this->isQuitFilterChainMethodCalled === false) {
+                $this->handleAction();
+            }
+            if ($this->isQuitFilterChainMethodCalled === false) {
+                $this->runAfterFilters();
+            }
         } catch (Exception $e) {} catch (Throwable $e) {}
         if ($e !== null) {
             $this->quitFilterChain($e);
@@ -270,30 +275,13 @@ abstract class Controller {
     }
 
     /**
-     * @return void
-     */
-    public function quit() {
-        if ($this->isQuitMethodCalled) {
-            throw new InvalidOperationException(
-                "The quit method of class '" . __CLASS__
-                    . "' cannot be called more than once."
-            );
-        }
-        $this->isQuitMethodCalled = true;
-        $this->quitFilterChain();
-        $this->finalize();
-        $app = $this->getApp();
-        $app->quit();
-    }
-
-    /**
      * @param string $location
      * @param int $statusCode
      * @return void
      */
     public function redirect($location, $statusCode = 302) {
         Response::setHeader('Location: ' . $location, true, $statusCode);
-        $this->quit();
+        $this->quitFilterChain();
     }
 
     /**
@@ -375,9 +363,13 @@ abstract class Controller {
      */
     private function runBeforeFilters() {
         foreach ($this->filterChain as &$config) {
-            $type = $config['type'];
-            if ($type === 'before' || $type === 'around') {
-                $this->runFilter($config);
+            if ($this->isQuitFilterChainMethodCalled === false) {
+                $type = $config['type'];
+                if ($type === 'before' || $type === 'around') {
+                    $this->runFilter($config);
+                }
+            } else {
+                return;
             }
         }
     }
@@ -391,9 +383,13 @@ abstract class Controller {
             $this->isFilterChainReversed = true;
         }
         foreach ($this->filterChain as &$config) {
-            $type = $config['type'];
-            if ($type === 'after' || $type === 'yielded') {
-                $this->runFilter($config);
+            if ($this->isQuitFilterChainMethodCalled === false) {
+                $type = $config['type'];
+                if ($type === 'after' || $type === 'yielded') {
+                    $this->runFilter($config);
+                }
+            } else {
+                return;
             }
         }
     }
@@ -431,7 +427,7 @@ abstract class Controller {
             }
         }
         if ($shouldReturnResult === false && $result === false) {
-            $this->quit();
+            $this->quitFilterChain();
         }
         return $result;
     }

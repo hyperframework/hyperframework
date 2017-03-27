@@ -130,8 +130,9 @@ abstract class Router {
      * @return void
      */
     protected function redirect($location, $statusCode = 301) {
-        Response::setHeader('Location: ' . $location, true, $statusCode);
-        $this->getApp()->quit();
+        $this->setParam('location', $location);
+        $this->setParam('status_code', $statusCode);
+        $this->setControllerClass(RedirectionController::class);
     }
 
     /**

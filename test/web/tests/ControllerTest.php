@@ -249,56 +249,6 @@ class ControllerTest extends Base {
         $controller->renderView();
     }
 
-    public function testQuit() {
-        $isExitCalled = false;
-        Config::set('hyperframework.exit_function', function() {
-            $this->onExit();
-        });
-        $app = new App(dirname(__DIR__));
-        $router = $app->getRouter();
-        $router->setAction('index');
-        $controller = $this->getMockBuilder(
-            'Hyperframework\Web\Test\IndexController'
-        )->setConstructorArgs([$app])->setMethods(['handleAction', 'finalize'])->getMock();
-        $isQuitFilterChainCalled = false;
-        $isFinalizeCalled = false;
-        $controller->addAroundFilter(
-            function() use (&$isQuitFilterChainCalled) {
-                yield;
-                $isQuitFilterChainCalled = true;
-            }
-        );
-        $controller->addBeforeFilter(function() use ($controller) {
-            $controller->quit();
-        });
-        $controller->method('finalize')->will($this->returnCallback(
-            function() use (&$isFinalizeCalled, &$isExitCalled) {
-                if ($isExitCalled === false) {
-                    $isFinalizeCalled = true;
-                }
-            }
-        ));
-        $controller->run();
-        $this->assertTrue($isQuitFilterChainCalled);
-        $this->assertTrue($isFinalizeCalled);
-        $this->assertTrue($this->isExitCalled);
-    }
-
-    /**
-     * @expectedException Hyperframework\Common\InvalidOperationException
-     */
-    public function testQuitTwice() {
-        Config::set('hyperframework.exit_function', function() {
-            $this->onExit();
-        });
-        $app = new App(dirname(__DIR__));
-        $router = $app->getRouter();
-        $router->setAction('index');
-        $controller = new IndexController($app);
-        $controller->quit();
-        $controller->quit();
-    }
-
     public function testRedirect() {
         $app = new App(dirname(__DIR__));
         $router = $app->getRouter();
@@ -306,8 +256,7 @@ class ControllerTest extends Base {
         $controller = $this->getMockBuilder(
             'Hyperframework\Web\Test\IndexController'
         )->setConstructorArgs([$app])
-            ->setMethods(['handleAction', 'quit'])->getMock();
-        $controller->expects($this->once())->method('quit');
+            ->setMethods(['handleAction'])->getMock();
         $engine = $this->getMock('Hyperframework\Web\ResponseEngine');
         $engine->expects($this->once())->method('setHeader')->with(
             'Location: /', true, 302

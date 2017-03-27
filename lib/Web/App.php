@@ -17,7 +17,6 @@ class App extends Base {
         $app = static::createApp();
         $controller = $app->createController();
         $controller->run();
-        $app->finalize();
     }
 
     /**

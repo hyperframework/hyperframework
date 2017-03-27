@@ -47,33 +47,8 @@ class AppTest extends Base {
         $this->assertFalse($isCalled);
     }
 
-    public function testQuit() {
-        Config::set('hyperframework.initialize_config', false);
-        Config::set('hyperframework.initialize_error_handler', false);
-        $app = $this->getMockBuilder('Hyperframework\Common\Test\App')
-            ->setMethods(['finalize'])
-            ->setConstructorArgs(['/path'])->getMock();
-        $app->expects($this->once())->method('finalize');
-        self::$isExitCalled = false;
-        Config::set('hyperframework.exit_function', __CLASS__ . '::onExit');
-        $app->quit();
-        $this->assertTrue(self::$isExitCalled);
-    }
-
     public static function onExit() {
         self::$isExitCalled = true;
-    }
-
-    /**
-     * @expectedException Hyperframework\Common\InvalidOperationException
-     */
-    public function testQuitTwice() {
-        Config::set('hyperframework.initialize_config', false);
-        Config::set('hyperframework.initialize_error_handler', false);
-        Config::set('hyperframework.exit_function', __CLASS__ . '::onExit');
-        $app = new App('/path');
-        $app->quit();
-        $app->quit();
     }
 
     public function testInitializeConfig() {

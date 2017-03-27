@@ -73,14 +73,6 @@ class MultipleCommandApp extends App {
                 $this->setArguments($elements['arguments']);
             }
         }
-        if ($this->hasGlobalOption('help') || $this->hasOption('help')) {
-            $this->renderHelp();
-            $this->quit();
-        }
-        if ($this->hasGlobalOption('version')) {
-            $this->renderVersion();
-            $this->quit();
-        }
     }
 
     /**
@@ -103,6 +95,14 @@ class MultipleCommandApp extends App {
      * @return void
      */
     protected function executeCommand() {
+        if ($this->hasGlobalOption('help') || $this->hasOption('help')) {
+            $this->renderHelp();
+            return;
+        }
+        if ($this->hasGlobalOption('version')) {
+            $this->renderVersion();
+            return;
+        }
         if ($this->hasSubcommand()) {
             $this->executeSubcommand();
         } else {

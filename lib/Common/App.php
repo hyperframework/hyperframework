@@ -2,8 +2,6 @@
 namespace Hyperframework\Common;
 
 abstract class App {
-    private $isQuitMethodCalled = false;
-
     /**
      * @param string $rootPath
      */
@@ -17,21 +15,6 @@ abstract class App {
         )) {
             $this->initializeErrorHandler();
         }
-    }
-
-    /**
-     * @return void
-     */
-    public function quit() {
-        if ($this->isQuitMethodCalled) {
-            throw new InvalidOperationException(
-                "The quit method of class '" . __CLASS__
-                    . "' cannot be called more than once."
-            );
-        }
-        $this->isQuitMethodCalled = true;
-        $this->finalize();
-        ExitHelper::exitScript();
     }
 
     /**
@@ -58,9 +41,4 @@ abstract class App {
         $handler = new $class;
         $handler->run();
     }
-
-    /**
-     * @return void
-     */
-    protected function finalize() {}
 }

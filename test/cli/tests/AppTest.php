@@ -10,7 +10,7 @@ class AppTest extends Base {
     public function createApp($shouldCallConstructor = true) {
         $mock = $this->getMockBuilder('Hyperframework\Cli\App')
             ->setMethods([
-                'quit', 'initializeConfig', 'initializeErrorHandler'
+                'initializeConfig', 'initializeErrorHandler'
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -23,9 +23,8 @@ class AppTest extends Base {
     public function testRun() {
         $app = $this->getMockBuilder('Hyperframework\Cli\App')
             ->disableOriginalConstructor()
-            ->setMethods(['executeCommand', 'finalize'])->getMock();
+            ->setMethods(['executeCommand'])->getMock();
         $app->expects($this->once())->method('executeCommand');
-        $app->expects($this->once())->method('finalize');
         Registry::set('hyperframework.cli.test.app', $app);
         App::run('');
     }
@@ -79,6 +78,7 @@ class AppTest extends Base {
         );
         $_SERVER['argv'] = ['run', '-h'];
         $app = $this->createApp();
+        $this->callProtectedMethod($app, 'executeCommand', [dirname(__dir__)]);
     }
 
     /**
@@ -90,6 +90,7 @@ class AppTest extends Base {
         );
         $_SERVER['argv'] = ['run', '-h'];
         $app = $this->createApp();
+        $this->callProtectedMethod($app, 'executeCommand', [dirname(__dir__)]);
     }
 
     /**
@@ -111,16 +112,16 @@ class AppTest extends Base {
         );
         $_SERVER['argv'] = ['run', '-h'];
         $app = $this->createApp(false);
-        $app->expects($this->once())->method('quit');
         $app->__construct(dirname(__DIR__));
+        $this->callProtectedMethod($app, 'executeCommand', [dirname(__dir__)]);
     }
 
     public function testRenderVersion() {
         $this->expectOutputString("1.0.0" . PHP_EOL);
         $_SERVER['argv'] = ['run', '--version'];
         $app = $this->createApp(false);
-        $app->expects($this->once())->method('quit');
         $app->__construct(dirname(__DIR__));
+        $this->callProtectedMethod($app, 'executeCommand', [dirname(__dir__)]);
     }
 
     public function testCustomCommandConfig() {
@@ -158,7 +159,6 @@ class AppTest extends Base {
         ]);
         $app = $this->getMockBuilder('Hyperframework\Cli\App')
             ->setMethods([
-                'quit',
                 'initializeConfig',
                 'initializeErrorHandler',
                 'getCommandConfig'
@@ -167,6 +167,7 @@ class AppTest extends Base {
             ->getMock();
         $app->method('getCommandConfig')->willReturn($commandConfig);
         $app->__construct(dirname(__DIR__));
+        $this->callProtectedMethod($app, 'executeCommand', [dirname(__dir__)]);
     }
 
     public function testCommandParsingError() {
