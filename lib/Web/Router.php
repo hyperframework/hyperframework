@@ -7,7 +7,6 @@ use Hyperframework\Common\NamespaceCombiner;
 use Hyperframework\Common\Inflector;
 
 abstract class Router {
-    private $app;
     private $params = [];
     private $module;
     private $controller;
@@ -18,13 +17,6 @@ abstract class Router {
     private $domain;
     private $matchStatus = 'NOT_MATCHED';
     private $allowedMethods = [];
-
-    /**
-     * @param App $app
-     */
-    public function __construct($app) {
-        $this->app = $app;
-    }
 
     /**
      * @param string $name
@@ -125,17 +117,6 @@ abstract class Router {
     abstract protected function prepare($routes);
 
     /**
-     * @param string $location
-     * @param int $statusCode
-     * @return void
-     */
-    protected function redirect($location, $statusCode = 301) {
-        $this->setParam('location', $location);
-        $this->setParam('status_code', $statusCode);
-        $this->setControllerClass(RedirectionController::class);
-    }
-
-    /**
      * @param string $name
      * @param mixed $value
      * @return void
@@ -213,10 +194,14 @@ abstract class Router {
     }
 
     /**
-     * @return App
+     * @param string $location
+     * @param int $statusCode
+     * @return void
      */
-    protected function getApp() {
-        return $this->app;
+    private function redirect($location, $statusCode = 301) {
+        $this->setParam('location', $location);
+        $this->setParam('status_code', $statusCode);
+        $this->setControllerClass(RedirectionController::class);
     }
 
     /**

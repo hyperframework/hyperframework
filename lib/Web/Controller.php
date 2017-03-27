@@ -281,6 +281,7 @@ abstract class Controller {
      */
     public function redirect($location, $statusCode = 302) {
         Response::setHeader('Location: ' . $location, true, $statusCode);
+        $this->disableView();
         $this->quitFilterChain();
     }
 
