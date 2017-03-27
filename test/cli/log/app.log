@@ -1,1 +1,0 @@
-2017-03-27 14:21:05 [FATAL] 2851 | PHP Fatal error:  Call to undefined method Hyperframework\Cli\Test\Command::quit() in /Users/mike/hyperframework/test/cli/tests/CommandTest.php on line 16
