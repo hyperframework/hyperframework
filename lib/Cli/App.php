@@ -15,20 +15,13 @@ class App extends Base {
      * @return void
      */
     public static function run($rootPath) {
+        $app = static::createApp($rootPath);
         try {
-            $app = static::createApp($rootPath);
+            $app->initializeCommand();
             $app->executeCommand();
         } catch (CommandParsingException $e) {
-            $this->renderCommandParsingError($e);
+            $app->renderCommandParsingError($e);
         }
-    }
-
-    /**
-     * @param string $rootPath
-     */
-    public function __construct($rootPath) {
-        parent::__construct($rootPath);
-        $this->initializeCommandOptionsAndArguments();
     }
 
     /**
@@ -87,7 +80,7 @@ class App extends Base {
     /**
      * @return void
      */
-    protected function initializeCommandOptionsAndArguments() {
+    protected function initializeCommand() {
         $elements = $this->parseCommand();
         if (isset($elements['options'])) {
             $this->setOptions($elements['options']);
@@ -168,9 +161,8 @@ class App extends Base {
         $class = Config::getClass(
             'hyperframework.cli.command_parser_class', CommandParser::class
         );
-        $commandConfig = $this->getCommandConfig();
-        $commandParser = new $class;
-        return $commandParser->parse($commandConfig);
+        $commandParser = new $class($this->getCommandConfig());
+        return $commandParser->parse($_SERVER['argv']);
     }
 
     /**

@@ -2,18 +2,24 @@
 namespace Hyperframework\Cli;
 
 class CommandParser {
+    private $commandConfig;
+
     /**
      * @param CommandConfig $commandConfig
+     */
+    public function __construct($commandConfig) {
+        $this->commandConfig = $commandConfig;
+    }
+
+    /**
      * @param string[] $argv
      * @return array
      */
-    public function parse($commandConfig, $argv = null) {
-        if ($argv === null) {
-            $argv = $_SERVER['argv'];
-        }
+    public function parse($argv) {
         $result = [];
         $subcommandName = null;
         $optionType = null;
+        $commandConfig = $this->commandConfig;
         if ($commandConfig->isMultipleCommandMode()) {
             $result['global_options'] = [];
             $optionType = 'global_options';

@@ -17,6 +17,9 @@ class AppTest extends Base {
         if ($shouldCallConstructor) {
             $mock->__construct(dirname(__DIR__));
         }
+        $this->callProtectedMethod(
+            $mock, 'initializeCommand', [dirname(__DIR__)]
+        );
         return $mock;
     }
 
@@ -167,6 +170,9 @@ class AppTest extends Base {
             ->getMock();
         $app->method('getCommandConfig')->willReturn($commandConfig);
         $app->__construct(dirname(__DIR__));
+        $this->callProtectedMethod(
+           $app, 'initializeCommand', [dirname(__DIR__)]
+        );
         $this->callProtectedMethod($app, 'executeCommand', [dirname(__dir__)]);
     }
 

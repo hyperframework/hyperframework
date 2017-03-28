@@ -59,7 +59,7 @@ class MultipleCommandApp extends App {
     /**
      * @return void
      */
-    protected function initializeCommandOptionsAndArguments() {
+    protected function initializeCommand() {
         $elements = $this->parseCommand();
         if (isset($elements['global_options'])) {
             $this->setGlobalOptions($elements['global_options']);

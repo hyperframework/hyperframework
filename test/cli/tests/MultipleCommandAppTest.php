@@ -29,6 +29,9 @@ class MultipleCommandAppTest extends Base {
         $mock->method('getCommandConfig')->willReturn($commandConfig);
         if ($shouldCallConstructor) {
             $mock->__construct(dirname(__DIR__));
+            $this->callProtectedMethod(
+                $mock, 'initializeCommand', [dirname(__DIR__)]
+            );
         }
         return $mock;
     }
@@ -85,6 +88,9 @@ class MultipleCommandAppTest extends Base {
         $_SERVER['argv'] = ['run', '-h'];
         $app = $this->createApp(false);
         $app->__construct(dirname(__DIR__));
+        $this->callProtectedMethod(
+            $app, 'initializeCommand', [dirname(__DIR__)]
+        );
         $this->callProtectedMethod($app, 'executeCommand', [dirname(__dir__)]);
     }
 
@@ -95,6 +101,9 @@ class MultipleCommandAppTest extends Base {
         $_SERVER['argv'] = ['run', 'child', '-h'];
         $app = $this->createApp(false);
         $app->__construct(dirname(__DIR__));
+        $this->callProtectedMethod(
+            $app, 'initializeCommand', [dirname(__DIR__)]
+        );
         $this->callProtectedMethod($app, 'executeCommand', [dirname(__dir__)]);
     }
 
@@ -103,6 +112,9 @@ class MultipleCommandAppTest extends Base {
         $_SERVER['argv'] = ['run', '--version'];
         $app = $this->createApp(false);
         $app->__construct(dirname(__DIR__));
+        $this->callProtectedMethod(
+            $app, 'initializeCommand', [dirname(__DIR__)]
+        );
         $this->callProtectedMethod($app, 'executeCommand', [dirname(__dir__)]);
     }
 
