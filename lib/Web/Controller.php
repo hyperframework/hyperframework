@@ -62,7 +62,6 @@ abstract class Controller {
                 throw $e;
             }
         }
-        $this->finalize();
     }
 
     /**
@@ -353,11 +352,6 @@ abstract class Controller {
             $this->renderView();
         }
     }
-
-    /**
-     * @return void
-     */
-    protected function finalize() {}
 
     /**
      * @return void

@@ -15,9 +15,8 @@ class App extends Base {
      * @return void
      */
     public static function run($rootPath) {
-        $app = static::createApp($rootPath);
         try {
-            $app->parseCommand();
+            $app = static::createApp($rootPath);
             $app->executeCommand();
         } catch (CommandParsingException $e) {
             $this->renderCommandParsingError($e);
@@ -166,16 +165,12 @@ class App extends Base {
      * @return array
      */
     protected function parseCommand() {
-        try {
-            $class = Config::getClass(
-                'hyperframework.cli.command_parser_class', CommandParser::class
-            );
-            $commandConfig = $this->getCommandConfig();
-            $commandParser = new $class;
-            return $commandParser->parse($commandConfig);
-        } catch (CommandParsingException $e) {
-            $this->renderCommandParsingError($e);
-        }
+        $class = Config::getClass(
+            'hyperframework.cli.command_parser_class', CommandParser::class
+        );
+        $commandConfig = $this->getCommandConfig();
+        $commandParser = new $class;
+        return $commandParser->parse($commandConfig);
     }
 
     /**

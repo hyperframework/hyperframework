@@ -15,8 +15,9 @@ class RedirectionController {
      * @return void
      */
     public function run() {
-        Response::getHeader(
-            $app->getRouter()->getParam('location'),
+        Response::setHeader(
+            'Location: ' . $app->getRouter()->getParam('location'),
+            true,
             $app->getRouter()->getParam('status_code')
         );
     }

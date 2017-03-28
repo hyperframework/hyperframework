@@ -170,11 +170,10 @@ class AppTest extends Base {
         $this->callProtectedMethod($app, 'executeCommand', [dirname(__dir__)]);
     }
 
+    /**
+     * @expectedException Hyperframework\Cli\CommandParsingException
+     */
     public function testCommandParsingError() {
-        $this->expectOutputString(
-            "Unknown option 'unknown'."
-                . PHP_EOL . "See 'test --help'." . PHP_EOL
-        );
         $_SERVER['argv'] = ['run', '--unknown'];
         $app = $this->createApp(false);
         $app->__construct(dirname(__DIR__));

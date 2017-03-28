@@ -44,7 +44,7 @@ class ControllerTest extends Base {
         $controller = $this->getMockBuilder(
             'Hyperframework\Web\Test\IndexController'
         )->setConstructorArgs([$app])
-            ->setMethods(['handleAction', 'finalize'])->getMock();
+            ->setMethods(['handleAction'])->getMock();
         $recorder = [];
         $controller->addBeforeFilter(function() use (&$recorder) {
             $recorder[] = 'before';
@@ -56,13 +56,9 @@ class ControllerTest extends Base {
             ->will($this->returnCallback(function() use (&$recorder) {
                 $recorder[] = 'handle_action';
             }));
-        $controller->expects($this->once())->method('finalize')
-            ->will($this->returnCallback(function() use (&$recorder) {
-                $recorder[] = 'finalize';
-            }));
         $controller->run();
         $this->assertSame(
-            ['before', 'handle_action', 'after', 'finalize'], $recorder
+            ['before', 'handle_action', 'after'], $recorder
         );
     }
 
@@ -124,7 +120,7 @@ class ControllerTest extends Base {
         $controller = $this->getMockBuilder(
             'Hyperframework\Web\Test\IndexController'
         )->setConstructorArgs([$app])
-            ->setMethods(['handleAction', 'finalize'])->getMock();
+            ->setMethods(['handleAction'])->getMock();
         $isAfterFilterACalled = false;
         $controller->addAfterFilter(function() use (&$isAfterFilterACalled) {
             $isAfterFilterACalled = true;
