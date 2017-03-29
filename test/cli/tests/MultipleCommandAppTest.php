@@ -30,7 +30,9 @@ class MultipleCommandAppTest extends Base {
         if ($shouldCallConstructor) {
             $mock->__construct(dirname(__DIR__));
             $this->callProtectedMethod(
-                $mock, 'initializeCommand', [dirname(__DIR__)]
+                $mock, 'setElements', [$this->callProtectedMethod(
+                    $mock, 'parseCommand', $_SERVER['argv']
+                )]
             );
         }
         return $mock;
@@ -89,7 +91,9 @@ class MultipleCommandAppTest extends Base {
         $app = $this->createApp(false);
         $app->__construct(dirname(__DIR__));
         $this->callProtectedMethod(
-            $app, 'initializeCommand', [dirname(__DIR__)]
+            $app, 'setElements', [$this->callProtectedMethod(
+                $app, 'parseCommand', $_SERVER['argv']
+            )]
         );
         $this->callProtectedMethod($app, 'executeCommand', [dirname(__dir__)]);
     }
@@ -102,7 +106,9 @@ class MultipleCommandAppTest extends Base {
         $app = $this->createApp(false);
         $app->__construct(dirname(__DIR__));
         $this->callProtectedMethod(
-            $app, 'initializeCommand', [dirname(__DIR__)]
+            $app, 'setElements', [$this->callProtectedMethod(
+                $app, 'parseCommand', $_SERVER['argv']
+            )]
         );
         $this->callProtectedMethod($app, 'executeCommand', [dirname(__dir__)]);
     }
@@ -113,7 +119,9 @@ class MultipleCommandAppTest extends Base {
         $app = $this->createApp(false);
         $app->__construct(dirname(__DIR__));
         $this->callProtectedMethod(
-            $app, 'initializeCommand', [dirname(__DIR__)]
+            $app, 'setElements', [$this->callProtectedMethod(
+                $app, 'parseCommand', $_SERVER['argv']
+            )]
         );
         $this->callProtectedMethod($app, 'executeCommand', [dirname(__dir__)]);
     }

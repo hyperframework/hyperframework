@@ -18,7 +18,9 @@ class AppTest extends Base {
             $mock->__construct(dirname(__DIR__));
         }
         $this->callProtectedMethod(
-            $mock, 'initializeCommand', [dirname(__DIR__)]
+            $mock, 'setElements', [$this->callProtectedMethod(
+                $mock, 'parseCommand', $_SERVER['argv']
+            )]
         );
         return $mock;
     }
@@ -171,7 +173,9 @@ class AppTest extends Base {
         $app->method('getCommandConfig')->willReturn($commandConfig);
         $app->__construct(dirname(__DIR__));
         $this->callProtectedMethod(
-           $app, 'initializeCommand', [dirname(__DIR__)]
+            $app, 'setElements', [$this->callProtectedMethod(
+                $app, 'parseCommand', $_SERVER['argv']
+            )]
         );
         $this->callProtectedMethod($app, 'executeCommand', [dirname(__dir__)]);
     }

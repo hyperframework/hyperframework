@@ -17,7 +17,8 @@ class App extends Base {
     public static function run($rootPath) {
         $app = static::createApp($rootPath);
         try {
-            $app->initializeCommand();
+            $elements = $app->parseCommand();
+            $app->setElements($elements);
             $app->executeCommand();
         } catch (CommandParsingException $e) {
             $app->renderCommandParsingError($e);
@@ -78,10 +79,10 @@ class App extends Base {
     }
 
     /**
+     * @param array $elements
      * @return void
      */
-    protected function initializeCommand() {
-        $elements = $this->parseCommand();
+    protected function setElements($elements) {
         if (isset($elements['options'])) {
             $this->setOptions($elements['options']);
         }

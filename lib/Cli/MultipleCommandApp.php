@@ -57,21 +57,16 @@ class MultipleCommandApp extends App {
     }
 
     /**
+     * @param array $elements
      * @return void
      */
-    protected function initializeCommand() {
-        $elements = $this->parseCommand();
+    protected function setElements($elements) {
         if (isset($elements['global_options'])) {
             $this->setGlobalOptions($elements['global_options']);
         }
         if (isset($elements['subcommand_name'])) {
             $this->setSubcommandName($elements['subcommand_name']);
-            if (isset($elements['options'])) {
-                $this->setOptions($elements['options']);
-            }
-            if (isset($elements['arguments'])) {
-                $this->setArguments($elements['arguments']);
-            }
+            parent::setElements($elements);
         }
     }
 
