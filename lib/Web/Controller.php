@@ -46,15 +46,18 @@ abstract class Controller {
         $this->isRunMethodCalled = true;
         $e = null;
         try {
-            if ($this->isQuitFilterChainMethodCalled === false) {
-                $this->runBeforeFilters();
+            if ($this->isQuitFilterChainMethodCalled) {
+                return;
             }
-            if ($this->isQuitFilterChainMethodCalled === false) {
-                $this->handleAction();
+            $this->runBeforeFilters();
+            if ($this->isQuitFilterChainMethodCalled) {
+                return;
             }
-            if ($this->isQuitFilterChainMethodCalled === false) {
-                $this->runAfterFilters();
+            $this->handleAction();
+            if ($this->isQuitFilterChainMethodCalled) {
+                return;
             }
+            $this->runAfterFilters();
         } catch (Exception $e) {} catch (Throwable $e) {}
         if ($e !== null) {
             $this->quitFilterChain($e);
