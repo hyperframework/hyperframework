@@ -1010,7 +1010,9 @@ class WebClient {
     private function sendHttpRequest($method, $url, $data, $options = []) {
         $options[CURLOPT_CUSTOMREQUEST] = $method;
         $options[CURLOPT_URL] = $url;
-        $options[self::OPT_DATA] = $data;
+        if ($data !== null) {
+            $options[self::OPT_DATA] = $data;
+        }
         return $this->send($options);
     }
 }
