@@ -42,13 +42,14 @@ abstract class Controller {
                 'The run method of ' . __CLASS__
                     . ' cannot be called more than once.'
             );
+        } else {
+            $this->isRunMethodCalled = true;
         }
-        $this->isRunMethodCalled = true;
+        if ($this->isQuitFilterChainMethodCalled) {
+            return;
+        }
         $e = null;
         try {
-            if ($this->isQuitFilterChainMethodCalled) {
-                return;
-            }
             $this->runBeforeFilters();
             if ($this->isQuitFilterChainMethodCalled) {
                 return;
@@ -361,13 +362,13 @@ abstract class Controller {
      */
     private function runBeforeFilters() {
         foreach ($this->filterChain as &$config) {
-            if ($this->isQuitFilterChainMethodCalled === false) {
+            if ($this->isQuitFilterChainMethodCalled) {
+                return;
+            } else {
                 $type = $config['type'];
                 if ($type === 'before' || $type === 'around') {
                     $this->runFilter($config);
                 }
-            } else {
-                return;
             }
         }
     }
@@ -381,13 +382,13 @@ abstract class Controller {
             $this->isFilterChainReversed = true;
         }
         foreach ($this->filterChain as &$config) {
-            if ($this->isQuitFilterChainMethodCalled === false) {
+            if ($this->isQuitFilterChainMethodCalled) {
+                return;
+            } else {
                 $type = $config['type'];
                 if ($type === 'after' || $type === 'yielded') {
                     $this->runFilter($config);
                 }
-            } else {
-                return;
             }
         }
     }
