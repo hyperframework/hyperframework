@@ -7,7 +7,7 @@ use Hyperframework\Db\Test\TestCase as Base;
 class DbActiveRecordTest extends Base {
     protected function setUp() {
         parent::setUp();
-        DbImportCommand::execute(
+        DbClient::insertAll(
             'Document',
             [[1, 'doc 1', 12.34], [2, 'doc 2', 0]],
             ['column_names' => ['id', 'name', 'decimal']]

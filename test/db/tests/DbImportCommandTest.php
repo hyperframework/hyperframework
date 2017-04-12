@@ -12,7 +12,7 @@ class DbImportCommandTest extends Base {
     }
 
     public function testExecute() {
-        DbImportCommand::execute(
+        DbClient::insertAll(
             'Document',
             [['id' => 1, 'name' => 'doc 1', 'decimal' => 12.34]]
         );
@@ -28,7 +28,7 @@ class DbImportCommandTest extends Base {
         $mock->expects($this->exactly(2))->method('onPreparedStatementExecuting');
         $mock->expects($this->exactly(2))->method('onPreparedStatementExecuted');
         EventEmitter::addListener($mock);
-        DbImportCommand::execute(
+        DbClient::insertAll(
             'Document',
             [[1, 'doc 1', 12.34], [2, 'doc 2', 0]],
             [
@@ -42,13 +42,13 @@ class DbImportCommandTest extends Base {
      * @expectedException InvalidArgumentException
      */
     public function testInvalidBatchSizeOption() {
-        DbImportCommand::execute(
+        DbClient::insertAll(
             'Document', [[1, 'doc 1', 12.34]], ['batch_size' => 0]
         );
     }
 
     public function testColumnNameOption() {
-        DbImportCommand::execute(
+        DbClient::insertAll(
             'Document',
             [[1, 'doc 1', 12.34]],
             ['column_names' => ['id', 'name', 'decimal']]
@@ -60,7 +60,7 @@ class DbImportCommandTest extends Base {
      * @expectedException InvalidArgumentException
      */
     public function testInvalidColumnNameOption() {
-        DbImportCommand::execute(
+        DbClient::insertAll(
             'Document',
             [[1, 'doc 1', 12.34]],
             ['column_names' => 'name']
@@ -71,14 +71,14 @@ class DbImportCommandTest extends Base {
      * @expectedException InvalidArgumentException
      */
     public function testInvalidFirstRowType() {
-        DbImportCommand::execute('Document', ['name']);
+        DbClient::insertAll('Document', ['name']);
     }
 
     /**
      * @expectedException InvalidArgumentException
      */
     public function testInvalidNonFirstRowType() {
-        DbImportCommand::execute(
+        DbClient::insertAll(
             'Document',
             [['id' => 1, 'name' => 'doc 1', 'decimal' => 12.34], 'name']
         );
@@ -88,7 +88,7 @@ class DbImportCommandTest extends Base {
      * @expectedException InvalidArgumentException
      */
     public function testInvalidColumnNumber() {
-        DbImportCommand::execute(
+        DbClient::insertAll(
             'Document',
             [['id' => 1, 'name' => 'doc 1', 'decimal' => 12.34], ['id' => 2]]
         );

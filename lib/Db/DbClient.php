@@ -179,6 +179,16 @@ class DbClient {
 
     /**
      * @param string $table
+     * @param array[] $rows
+     * @param array $options
+     * @return void
+     */
+    public static function insertAll($table, $rows, $options = []) {
+        static::getEngine()->insertAll($table, $rows, $options);
+    }
+
+    /**
+     * @param string $table
      * @param array $columns
      * @param string|array $where
      * @param array $params

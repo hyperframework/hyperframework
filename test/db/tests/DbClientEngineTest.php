@@ -12,7 +12,7 @@ class DbClientEngineTest extends Base {
 
     protected function setUp() {
         parent::setUp();
-        DbImportCommand::execute(
+        DbClient::insertAll(
             'Document',
             [[1, 'doc 1', 12.34], [2, 'doc 2', null]],
             ['column_names' => ['id', 'name', 'decimal']]
