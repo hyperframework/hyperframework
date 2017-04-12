@@ -253,7 +253,7 @@ class DbClientEngine {
                 );
             }
         } else {
-            $batchSize = 1000;
+            $batchSize = $count;
         }
         foreach ($columnNames as &$columnName) {
             $columnName = $this->quoteIdentifier($columnName);
