@@ -3,6 +3,7 @@ namespace Hyperframework\Common;
 
 use ReflectionFunction;
 use Exception;
+use ArgumentCountError;
 use Hyperframework\Common\Test\TestCase as Base;
 
 class ErrorHandlerTest extends Base {
@@ -173,7 +174,14 @@ class ErrorHandlerTest extends Base {
             $this->assertEquals($e->getLine(), $line);
             $this->assertEquals($e->getFile(), $file);
             return;
+        } catch (ArgumentCountError $e) {
+            $line = __LINE__ - 9;
+            $file = __FILE__;
+            $this->assertEquals($e->getLine(), $line);
+            $this->assertEquals($e->getFile(), $file);
+            return;
         }
+
         $this->fail();
     }
 
