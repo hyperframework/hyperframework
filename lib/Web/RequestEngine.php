@@ -236,7 +236,8 @@ class RequestEngine {
                 );
                 if ($this->body === null) {
                     throw new BadRequestException(
-                        'The request body is not a valid json.'
+                        'The request body is not a valid json, '
+                            . lcfirst(json_last_error_msg()) . '.'
                     );
                 }
             }
