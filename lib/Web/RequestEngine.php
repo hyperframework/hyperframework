@@ -235,10 +235,11 @@ class RequestEngine {
                     $this->body, true, 512, JSON_BIGINT_AS_STRING
                 );
                 if ($this->body === null) {
-                    throw new BadRequestException(
-                        'The request body is not a valid json, '
-                            . lcfirst(json_last_error_msg()) . '.'
-                    );
+                    $errorMessage = 'The request body is not a valid json';
+                    if (json_last_error() !== JSON_ERROR_NONE) {
+                        $errorMessage .= ', ' . lcfirst(json_last_error_msg());
+                    }
+                    throw new BadRequestException($errorMessage . '.');
                 }
             }
         } else {
