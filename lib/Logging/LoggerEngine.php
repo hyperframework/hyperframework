@@ -130,7 +130,9 @@ class LoggerEngine {
                 }
             }
             if (is_array($config)) {
-                $this->handler = new CompositeLogHandler(null);
+                $this->handler = new CompositeLogHandler(
+                    $this->getName() . '.handlers'
+                );
                 foreach ($config as $name) {
                     $class = Config::getClass(
                         $this->getName() . '.handlers.' . $name . '.class',
