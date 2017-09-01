@@ -14,23 +14,14 @@ class DbConnectionFactory {
      */
     public function createConnection($name = null) {
         $config = $this->getConfig($name);
-        if (isset($config['dsn']) === false) {
-            $errorMessage =
-                "Field 'dsn' is missing in database connection config";
-            if ($name !== null) {
-                $errorMessage .= " '$name'";
-            }
-            throw new ConfigException($errorMessage . '.');
-        }
+        $dsn = isset($config['dsn']) ? $config['dsn'] : null;
         $username = isset($config['username']) ? $config['username'] : null;
         $password = isset($config['password']) ? $config['password'] : null;
         $options = isset($config['options']) ? $config['options'] : [];
         $class = Config::getClass(
             'hyperframework.db.connection_class', DbConnection::class
         );
-        $connection = new $class(
-            $name, $config['dsn'], $username, $password, $options
-        );
+        $connection = new $class($name, $dsn, $username, $password, $options);
         return $connection;
     }
 
@@ -50,8 +41,5 @@ class DbConnectionFactory {
         if ($name === null) {
             return $this->config;
         }
-        throw new ConfigException(
-            "Database connection config '$name' does not exist."
-        );
     }
 }
