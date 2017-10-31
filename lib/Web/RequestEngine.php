@@ -7,8 +7,7 @@ class RequestEngine {
     private $method;
     private $path;
     private $headers;
-    private $body;
-    private $isBodyInitialized = false;
+    private $bodyParams;
 
     /**
      * @return string
@@ -112,23 +111,20 @@ class RequestEngine {
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getBody() {
-        if ($this->isBodyInitialized === false) {
-            $this->initializeBody();
-            $this->isBodyInitialized = true;
-        }
-        return $this->body;
+        return stream_get_contents($this->openInputStream());
     }
 
     /**
-     * @param mixed $body
-     * @return void
+     * @return array
      */
-    public function setBody($body) {
-        $this->body = $body;
-        $this->isBodyInitialized = true;
+    public function getBodyParams() {
+        if ($this->bodyParams === null) {
+            $this->initializeBodyParams();
+        }
+        return $this->bodyParams;
     }
 
     /**
@@ -174,14 +170,6 @@ class RequestEngine {
     }
 
     /**
-     * @return array
-     */
-    public function getBodyParams() {
-        $body = $this->getBody();
-        return is_array($body) ? $body : [];
-    }
-
-    /**
      * @param string $name
      * @param mixed $default
      * @return mixed
@@ -208,7 +196,8 @@ class RequestEngine {
     /**
      * @return void
      */
-    private function initializeBody() {
+    private function initializeBodyParams() {
+        $this->bodyParams = [];
         $contentType = $this->getHeader('CONTENT_TYPE');
         if ($contentType === null) {
             $contentType = Config::getString(
@@ -223,18 +212,15 @@ class RequestEngine {
                 if ($contentType === 'application/x-www-form-urlencoded'
                     || $contentType === 'multipart/form-data'
                 ) {
-                    $this->body = $_POST;
+                    $this->bodyParams = $_POST;
                     return;
                 }
             }
-            $this->body = $this->getRawBody();
-            if ($contentType === 'application/x-www-form-urlencoded') {
-                parse_str($this->body, $this->body);
-            } elseif ($contentType === 'application/json') {
-                $this->body = json_decode(
-                    $this->body, true, 512, JSON_BIGINT_AS_STRING
+            if ($contentType === 'application/json') {
+                $this->bodyParams = json_decode(
+                    $this->getBody(), true, 512, JSON_BIGINT_AS_STRING
                 );
-                if ($this->body === null) {
+                if ($this->bodyParams === null) {
                     $errorMessage = 'The request body is not a valid json';
                     if (json_last_error() !== JSON_ERROR_NONE) {
                         $errorMessage .= ', ' . lcfirst(json_last_error_msg());
@@ -242,15 +228,6 @@ class RequestEngine {
                     throw new BadRequestException($errorMessage . '.');
                 }
             }
-        } else {
-            $this->body = $this->getRawBody();
         }
-    }
-
-    /**
-     * @return string
-     */
-    private function getRawBody() {
-        return stream_get_contents($this->openInputStream());
     }
 }

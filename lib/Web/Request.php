@@ -58,18 +58,10 @@ class Request {
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public static function getBody() {
         return static::getEngine()->getBody();
-    }
-
-    /**
-     * @param mixed $body
-     * @return void
-     */
-    public static function setBody($body) {
-        static::getEngine()->setBody($body);
     }
 
     /**

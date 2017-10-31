@@ -29,12 +29,11 @@ class CsrfProtectionEngineTest extends Base {
     public function testInvalidToken() {
         $engine2 = $this->getMock('Hyperframework\Web\ResponseEngine');
         $engine2->expects($this->once())->method('setCookie');
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $_SERVER['HTTP_CONTENT_TYPE'] = 'application/x-www-form-urlencoded';
         Response::setEngine($engine2);
         $engine = new CsrfProtectionEngine;
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        Request::setBody(
-            ['_csrf_token' => 'invalid']
-        );
+        $_POST = ['_csrf_token' => 'invalid'];
         $_COOKIE['_csrf_token'] = 'token';
         $engine->run();
     }
