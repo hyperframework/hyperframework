@@ -20,7 +20,7 @@ class WebClient {
 
     private $handle;
     private $options = [];
-    private $requestOptions = [];
+    private $requestOptions;
     private $responseHeaders;
     private $rawResponseHeaders;
 
@@ -352,6 +352,7 @@ class WebClient {
      * @return mixed
      */
     protected function getRequestOption($name) {
+        $this->checkRequestOptions();
         if (isset($this->requestOptions[$name])) {
             return $this->requestOptions[$name];
         }
@@ -361,6 +362,7 @@ class WebClient {
      * @return array
      */
     protected function getRequestOptions() {
+        $this->checkRequestOptions();
         return $this->requestOptions;
     }
 
@@ -370,6 +372,7 @@ class WebClient {
      * @return void
      */
     protected function setRequestOption($name, $value) {
+        $this->checkRequestOptions();
         $this->requestOptions[$name] = $value;
     }
 
@@ -378,6 +381,7 @@ class WebClient {
      * @return void
      */
     protected function setRequestOptions($options) {
+        $this->checkRequestOptions();
         foreach ($options as $name => $value) {
             $this->setRequestOption($name, $value);
         }
@@ -388,6 +392,7 @@ class WebClient {
      * @return bool
      */
     protected function hasRequestOption($name) {
+        $this->checkRequestOptions();
         return isset($this->requestOptions[$name]);
     }
 
@@ -396,6 +401,7 @@ class WebClient {
      * @return void
      */
     protected function removeRequestOption($name) {
+        $this->checkRequestOptions();
         unset($this->requestOptions[$name]);
     }
 
@@ -403,6 +409,7 @@ class WebClient {
      * @return void
      */
     protected function resetRequestOptions() {
+        $this->checkRequestOptions();
         $this->requestOptions = [];
     }
 
@@ -411,6 +418,7 @@ class WebClient {
      * @return void
      */
     protected function addRequestHeader($header) {
+        $this->checkRequestOptions();
         if (isset($this->requestOptions[CURLOPT_HTTPHEADER]) === false) {
             $this->requestOptions[CURLOPT_HTTPHEADER] = [$header];
             return;
@@ -606,6 +614,7 @@ class WebClient {
     private function initializeRequest($options = []) {
         $this->responseHeaders = [];
         $this->rawResponseHeaders = null;
+        $this->requestOptions = [];
         $this->setRequestOptions(array_replace($this->getOptions(), $options));
         $this->processExtraRequestOptions();
         $this->initializeCurlCallbacks();
@@ -632,7 +641,7 @@ class WebClient {
      * @return void
      */
     private function finalizeRequest() {
-        $this->resetRequestOptions();
+        $this->requestOptions = null;
     }
 
     /**
@@ -1014,5 +1023,14 @@ class WebClient {
             $options[self::OPT_DATA] = $data;
         }
         return $this->send($options);
+    }
+
+    /**
+     * @return void
+     */
+    private function checkRequestOptions() {
+        if ($this->requestOptions === null) {
+            throw new WebClientException('The request is not initialized.');
+        }
     }
 }
