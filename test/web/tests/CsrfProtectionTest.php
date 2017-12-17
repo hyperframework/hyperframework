@@ -47,15 +47,6 @@ class CsrfProtectionTest extends Base {
         CsrfProtection::getEngine();
     }
 
-    public function testSetEngine() {
-        $engine = new stdClass;
-        CsrfProtection::setEngine($engine);
-        $this->assertSame($engine, CsrfProtection::getEngine());
-        $this->assertSame(
-            $engine, Registry::get('hyperframework.web.csrf_protection_engine')
-        );
-    }
-
     public function testIsEnabled() {
         Config::set('hyperframework.web.csrf_protection.enable', false);
         $this->assertFalse(CsrfProtection::isEnabled());
@@ -63,7 +54,7 @@ class CsrfProtectionTest extends Base {
 
     private function mockEngineMethod($method) {
         $engine = $this->getMock('Hyperframework\Web\CsrfProtectionEngine');
-        CsrfProtection::setEngine($engine);
+        Registry::set('hyperframework.web.csrf_protection_engine', $engine);
         return $engine->expects($this->once())->method($method);
     }
 }

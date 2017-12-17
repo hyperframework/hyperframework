@@ -147,12 +147,4 @@ class Request {
             return new $class;
         });
     }
-
-    /**
-     * @param RequestEngine $engine
-     * @return void
-     */
-    public static function setEngine($engine) {
-        Registry::set('hyperframework.web.request_engine', $engine);
-    }
 }

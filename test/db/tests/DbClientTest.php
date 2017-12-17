@@ -292,18 +292,9 @@ class DbClientTest extends Base {
         DbClient::getEngine();
     }
 
-    public function testSetEngine() {
-        $engine = new stdClass;
-        DbClient::setEngine($engine);
-        $this->assertSame($engine, DbClient::getEngine());
-        $this->assertSame(
-            $engine, Registry::get('hyperframework.db.client_engine')
-        );
-    }
-
     private function mockEngineMethod($method) {
         $engine = $this->getMock('Hyperframework\Db\DbClientEngine');
-        DbClient::setEngine($engine);
+        Registry::set('hyperframework.db.client_engine', $engine);
         return $engine->expects($this->once())->method($method);
     }
 }

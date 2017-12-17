@@ -82,17 +82,9 @@ class ConfigTest extends Base {
         );
     }
 
-    public function testSetEngine() {
-        $engine = new stdClass;
-        Config::setEngine($engine);
-        $this->assertSame(
-            $engine, Registry::get('hyperframework.config_engine')
-        );
-    }
-
     private function mockEngineMethod($method) {
         $engine = $this->getMock('Hyperframework\Common\ConfigEngine');
-        Config::setEngine($engine);
+        Registry::set('hyperframework.config_engine', $engine);
         return $engine->expects($this->once())->method($method);
     }
 }

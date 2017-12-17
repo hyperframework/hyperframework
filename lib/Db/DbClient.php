@@ -353,12 +353,4 @@ class DbClient {
             return new $class;
         });
     }
-
-    /**
-     * @param DbClientEngine $engine
-     * @return void
-     */
-    public static function setEngine($engine) {
-        Registry::set('hyperframework.db.client_engine', $engine);
-    }
 }

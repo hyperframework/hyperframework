@@ -76,19 +76,10 @@ class LoggerTest extends Base {
         Logger::getEngine();
     }
 
-    public function testSetEngine() {
-        $engine = new stdClass;
-        Logger::setEngine($engine);
-        $this->assertSame($engine, Logger::getEngine());
-        $this->assertSame(
-            $engine, Registry::get('hyperframework.logging.logger.engine')
-        );
-    }
-
     private function mockEngineMethod($method) {
         $engine = $this->getMockBuilder('Hyperframework\Logging\LoggerEngine')
             ->setConstructorArgs(['hyperframework.logging.logger'])->getMock();
-        Logger::setEngine($engine);
+        Registry::set('hyperframework.logging.logger.engine', $engine);
         return $engine->expects($this->once())->method($method);
     }
 }

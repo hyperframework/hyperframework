@@ -65,11 +65,9 @@ class Response {
     }
 
     /**
-     * @param string $file
-     * @param int $line
      * @return bool
      */
-    public static function headersSent(&$file = null, &$line = null) {
+    public static function headersSent() {
         return static::getEngine()->headersSent();
     }
 
@@ -84,13 +82,5 @@ class Response {
             );
             return new $class;
         });
-    }
-
-    /**
-     * @param ResponseEngine $engine
-     * @return void
-     */
-    public static function setEngine($engine) {
-        Registry::set('hyperframework.web.response_engine', $engine);
     }
 }

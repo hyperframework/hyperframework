@@ -63,18 +63,9 @@ class ResponseTest extends Base {
         Response::getEngine();
     }
 
-    public function testSetEngine() {
-        $engine = new stdClass;
-        Response::setEngine($engine);
-        $this->assertSame($engine, Response::getEngine());
-        $this->assertSame(
-            $engine, Registry::get('hyperframework.web.response_engine')
-        );
-    }
-
     private function mockEngineMethod($method) {
         $engine = $this->getMock('Hyperframework\Web\ResponseEngine');
-        Response::setEngine($engine);
+        Registry::set('hyperframework.web.response_engine', $engine);
         return $engine->expects($this->once())->method($method);
     }
 }

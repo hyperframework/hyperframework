@@ -88,17 +88,13 @@ class ResponseEngine {
                 }
             }
         }
-        setcookie(
-            $name, $value, $expire, $path, $domain, $secure, $httpOnly
-        );
+        setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
     }
 
     /**
-     * @param string $file
-     * @param int $line
      * @return bool
      */
-    public function headersSent(&$file = null, &$line = null) {
-        return headers_sent($file, $line);
+    public function headersSent() {
+        return headers_sent();
     }
 }

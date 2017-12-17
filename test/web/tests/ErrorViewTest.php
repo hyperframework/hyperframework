@@ -1,6 +1,7 @@
 <?php
 namespace Hyperframework\Web;
 
+use Hyperframework\Common\Registry;
 use Hyperframework\Common\Config;
 use Hyperframework\Web\Test\TestCase as Base;
 
@@ -20,7 +21,7 @@ class ErrorViewTest extends Base {
         $engine->expects($this->once())->method('setHeader')->with(
             'Content-Type: text/plain; charset=utf-8'
         );
-        Response::setEngine($engine);
+        Registry::set('hyperframework.web.response_engine', $engine);
         $view = new ErrorView;
         $view->render(404, 'not found', null);
     }

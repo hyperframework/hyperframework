@@ -40,18 +40,9 @@ class RequestTest extends Base {
         Request::getEngine();
     }
 
-    public function testSetEngine() {
-        $engine = new stdClass;
-        Request::setEngine($engine);
-        $this->assertSame($engine, Request::getEngine());
-        $this->assertSame(
-            $engine, Registry::get('hyperframework.web.request_engine')
-        );
-    }
-
     private function mockEngineMethod($method) {
         $engine = $this->getMock('Hyperframework\Web\RequestEngine');
-        Request::setEngine($engine);
+        Registry::set('hyperframework.web.request_engine', $engine);
         return $engine->expects($this->once())->method($method);
     }
 }

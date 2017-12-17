@@ -85,12 +85,4 @@ class EventEmitter {
             return new $class;
         });
     }
-
-    /**
-     * @param EventEmitterEngine $engine
-     * @return void
-     */
-    public static function setEngine($engine) {
-        Registry::set('hyperframework.event_emitter_engine', $engine);
-    }
 }

@@ -50,12 +50,4 @@ class CsrfProtection {
             }
         );
     }
-
-    /**
-     * @param CsrfProtectionEngine $engine
-     * @return void
-     */
-    public static function setEngine($engine) {
-        Registry::set('hyperframework.web.csrf_protection_engine', $engine);
-    }
 }

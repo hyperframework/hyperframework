@@ -1,6 +1,7 @@
 <?php
 namespace Hyperframework\Web;
 
+use Hyperframework\Common\Registry;
 use Hyperframework\Common\Config;
 use Hyperframework\Web\Response;
 use Hyperframework\Web\Test\TestCase as Base;
@@ -26,7 +27,7 @@ class ErrorHandlerTest extends Base {
         $engine->method('headersSent')->willReturn(
             false
         );
-        Response::setEngine($engine);
+        Registry::set('hyperframework.web.response_engine', $engine);
     }
 
     protected function tearDown() {
@@ -156,7 +157,7 @@ class ErrorHandlerTest extends Base {
         $engine->expects($this->once())->method('setHeader')
             ->with('HTTP/1.1 500 Internal Server Error');
         $engine->method('headersSent')->willReturn(false);
-        Response::setEngine($engine);
+        Registry::set('hyperframework.web.response_engine', $engine);
         $handler = $this->getMockBuilder('Hyperframework\Web\ErrorHandler')
             ->setMethods(['renderErrorView'])->getMock();
         $this->callProtectedMethod($handler, 'handle');
@@ -170,7 +171,7 @@ class ErrorHandlerTest extends Base {
         $engine->expects($this->once())->method('setHeader')
             ->with('HTTP/1.1 404 Not Found');
         $engine->method('headersSent')->willReturn(false);
-        Response::setEngine($engine);
+        Registry::set('hyperframework.web.response_engine', $engine);
         $handler = $this->getMockBuilder('Hyperframework\Web\ErrorHandler')
             ->setMethods(['renderErrorView', 'getError'])->getMock();
         $handler->method('getError')->willReturn(new NotFoundException);

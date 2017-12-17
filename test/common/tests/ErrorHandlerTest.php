@@ -123,7 +123,7 @@ class ErrorHandlerTest extends Base {
         ini_set('display_errors', 0);
         $engine = $this->getMockBuilder('Hyperframework\Logging\LoggerEngine')
             ->setMethods(['handle'])->setConstructorArgs(['hyperframework.logging.logger'])->getMock();
-        ErrorLogger::setEngine($engine);
+        Registry::set('hyperframework.error_logger.engine', $engine);
         $engine->expects($this->once())
             ->method('handle')->will($this->returnCallback(
                 function ($logRecord) {

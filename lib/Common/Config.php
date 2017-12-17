@@ -144,12 +144,4 @@ class Config {
             return new ConfigEngine;
         });
     }
-
-    /**
-     * @param ConfigEngine $engine
-     * @return void
-     */
-    public static function setEngine($engine) {
-        Registry::set('hyperframework.config_engine', $engine);
-    }
 }

@@ -102,12 +102,4 @@ class Logger {
             }
         );
     }
-
-    /**
-     * @param LoggerEngine $engine
-     * @return void
-     */
-    public static function setEngine($engine) {
-        Registry::set(static::getName() . '.engine', $engine);
-    }
 }

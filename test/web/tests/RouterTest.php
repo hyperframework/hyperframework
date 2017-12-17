@@ -2,6 +2,7 @@
 namespace Hyperframework\Web;
 
 use Hyperframework\Web\Test\TestCase as Base;
+use Hyperframework\Common\Registry;
 
 class RouterTest extends Base {
     private $router;
@@ -494,6 +495,6 @@ class RouterTest extends Base {
             '',
             false
         );
-        Request::setEngine(null);//tmp fix
+       Registry::remove('hyperframework.web.request_engine');
     }
 }

@@ -3,6 +3,7 @@ namespace Hyperframework\Web;
 
 use Hyperframework\Web\Test\Exception;
 use Hyperframework\Common\Config;
+use Hyperframework\Common\Registry;
 use Hyperframework\Web\Test\IndexController;
 use Hyperframework\Web\Test\ParentConstructorNotCalledController;
 use Hyperframework\Common\NotSupportedException;
@@ -24,14 +25,14 @@ class ControllerTest extends Base {
         Config::set('hyperframework.web.csrf_protection.enable', true);
         $engine = $this->getMock('Hyperframework\Web\CsrfProtectionEngine');
         $engine->expects($this->once())->method('run');
-        CsrfProtection::setEngine($engine);
+        Registry::set('hyperframework.web.csrf_protection_engine', $engine);
         $this->testRun();
     }
 
     public function testCheckCsrfWhenProtectionIsDisabled() {
         $engine = $this->getMock('Hyperframework\Web\CsrfProtectionEngine');
         $engine->expects($this->never())->method('run');
-        CsrfProtection::setEngine($engine);
+        Registry::set('hyperframework.web.csrf_protection_engine', $engine);
         $this->testRun();
     }
 
@@ -257,7 +258,7 @@ class ControllerTest extends Base {
         $engine->expects($this->once())->method('setHeader')->with(
             'Location: /', true, 302
         );
-        Response::setEngine($engine);
+        Registry::set('hyperframework.web.response_engine', $engine);
         $controller->redirect('/');
     }
 

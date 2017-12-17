@@ -3,12 +3,13 @@ namespace Hyperframework\Web;
 
 use Hyperframework\Common\Config;
 use Hyperframework\Web\Test\TestCase as Base;
+use Hyperframework\Common\Registry;
 
 class CsrfProtectionEngineTest extends Base {
     public function testRunWithSafeMethod() {
         $engine2 = $this->getMock('Hyperframework\Web\ResponseEngine');
         $engine2->expects($this->once())->method('setCookie');
-        Response::setEngine($engine2);
+        Registry::set('hyperframework.web.response_engine', $engine2);
         $engine = new CsrfProtectionEngine;
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $engine->run();
@@ -31,7 +32,7 @@ class CsrfProtectionEngineTest extends Base {
         $engine2->expects($this->once())->method('setCookie');
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_SERVER['HTTP_CONTENT_TYPE'] = 'application/x-www-form-urlencoded';
-        Response::setEngine($engine2);
+        Registry::set('hyperframework.web.response_engine', $engine2);
         $engine = new CsrfProtectionEngine;
         $_POST = ['_csrf_token' => 'invalid'];
         $_COOKIE['_csrf_token'] = 'token';
