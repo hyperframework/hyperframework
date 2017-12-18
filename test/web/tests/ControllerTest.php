@@ -25,14 +25,14 @@ class ControllerTest extends Base {
         Config::set('hyperframework.web.csrf_protection.enable', true);
         $engine = $this->getMock('Hyperframework\Web\CsrfProtectionEngine');
         $engine->expects($this->once())->method('run');
-        Registry::set('hyperframework.web.csrf_protection_engine', $engine);
+        Registry::set('hyperframework.web.csrf_protection.engine', $engine);
         $this->testRun();
     }
 
     public function testCheckCsrfWhenProtectionIsDisabled() {
         $engine = $this->getMock('Hyperframework\Web\CsrfProtectionEngine');
         $engine->expects($this->never())->method('run');
-        Registry::set('hyperframework.web.csrf_protection_engine', $engine);
+        Registry::set('hyperframework.web.csrf_protection.engine', $engine);
         $this->testRun();
     }
 

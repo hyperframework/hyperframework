@@ -54,7 +54,7 @@ class CsrfProtectionTest extends Base {
 
     private function mockEngineMethod($method) {
         $engine = $this->getMock('Hyperframework\Web\CsrfProtectionEngine');
-        Registry::set('hyperframework.web.csrf_protection_engine', $engine);
+        Registry::set('hyperframework.web.csrf_protection.engine', $engine);
         return $engine->expects($this->once())->method($method);
     }
 }

@@ -40,7 +40,7 @@ class CsrfProtection {
      */
     public static function getEngine() {
         return Registry::get(
-            'hyperframework.web.csrf_protection_engine',
+            'hyperframework.web.csrf_protection.engine',
             function() {
                 $class = Config::getClass(
                     'hyperframework.web.csrf_protection.engine_class',
