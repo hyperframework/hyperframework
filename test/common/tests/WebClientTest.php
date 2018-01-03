@@ -77,7 +77,7 @@ class WebClientTest extends Base {
         $count = 0;
         CustomWebClient::sendAsyncRequests([
             WebClient::OPT_ASYNC_REQUESTS => [$c1, $c2], 
-            WebClient::OPT_ASYNC_REQUEST_COMPELETE_CALLBACK => function(
+            WebClient::OPT_ASYNC_REQUEST_COMPLETE_CALLBACK => function(
                 $client, $response, $error
             ) use (&$count) {
                 ++$count;
@@ -105,7 +105,7 @@ class WebClientTest extends Base {
             ]
         ]);
         CustomWebClient::sendAsyncRequests([
-            CustomWebClient::OPT_ASYNC_REQUEST_COMPELETE_CALLBACK => function(
+            CustomWebClient::OPT_ASYNC_REQUEST_COMPLETE_CALLBACK => function(
                 $client, $response, $error
             ) use (&$count, $c1, $c2) {
                 ++$count;
