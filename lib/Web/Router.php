@@ -1130,16 +1130,16 @@ abstract class Router {
             }
             return true;
         } else {
-            if ($extra instanceof Closure === false) {
-                $type = gettype($extra);
-                if ($type === 'Object') {
-                    $type = get_class($extra);
-                }
-                throw new RoutingException(
-                    'The extra rule must be a closure, ' . $type . ' given.'
-                );
+            if ($extra instanceof Closure) {
+                return (bool)$extra($matches);
             }
-            return (bool)$extra($matches);
+            $type = gettype($extra);
+            if ($type === 'Object') {
+                $type = get_class($extra);
+            }
+            throw new RoutingException(
+                'The extra rule must be a closure, ' . $type . ' given.'
+            );
         }
     }
 

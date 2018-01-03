@@ -9,8 +9,8 @@ class WebClient {
     const OPT_DATA_TYPE      = 'OPT_DATA_TYPE';
     const OPT_QUERY_PARAMS   = 'OPT_QUERY_PARAMS';
     const OPT_ASYNC_REQUESTS = 'OPT_ASYNC_REQUESTS';
-    const OPT_ASYNC_REQUEST_COMPELETE_CALLBACK
-                             = 'OPT_ASYNC_REQUEST_COMPELETE_CALLBACK';
+    const OPT_ASYNC_REQUEST_COMPLETE_CALLBACK
+                             = 'OPT_ASYNC_REQUEST_COMPLETE_CALLBACK';
     const OPT_ASYNC_REQUEST_FETCHING_CALLBACK
                              = 'OPT_ASYNC_REQUEST_FETCHING_CALLBACK';
     const OPT_ASYNC_REQUEST_FETCHING_INTERVAL
@@ -62,9 +62,9 @@ class WebClient {
                     $handleId = (int)$info['handle'];
                     $client = $asyncProcessingRequests[$handleId];
                     unset($asyncProcessingRequests[$handleId]);
-                    $requestCompeleteCallback =
-                        self::getAsyncRequestCompeleteCallback($asyncOptions);
-                    if ($requestCompeleteCallback !== null) {
+                    $requestCompleteCallback =
+                        self::getAsyncRequestCompleteCallback($asyncOptions);
+                    if ($requestCompleteCallback !== null) {
                         $error = null;
                         $result = false;
                         if ($info['result'] !== CURLE_OK) {
@@ -78,7 +78,7 @@ class WebClient {
                             );
                         }
                         call_user_func_array(
-                            $requestCompeleteCallback,
+                            $requestCompleteCallback,
                             [$client, $result, $error]
                         );
                         $client->finalizeRequest();
@@ -549,8 +549,8 @@ class WebClient {
      * @param array $asyncOptions
      * @return callback 
      */
-    private static function getAsyncRequestCompeleteCallback($asyncOptions) {
-        $optionName = self::OPT_ASYNC_REQUEST_COMPELETE_CALLBACK;
+    private static function getAsyncRequestCompleteCallback($asyncOptions) {
+        $optionName = self::OPT_ASYNC_REQUEST_COMPLETE_CALLBACK;
         if (isset($asyncOptions[$optionName])) {
             $result = $asyncOptions[$optionName];
             if (is_callable($result) === false) {
