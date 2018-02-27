@@ -14,7 +14,7 @@ class ConfigEngine {
         $segments = explode('.', $name);
         $node =& $this->data;
         foreach ($segments as $segment) {
-            if (isset($node[$segment])) {
+            if (is_array($node) && isset($node[$segment])) {
                 $node =& $node[$segment];
             } else {
                 return $default;
