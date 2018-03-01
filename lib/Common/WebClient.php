@@ -729,7 +729,10 @@ class WebClient {
             $this->addRequestHeader('Content-Type: ' . $type . $typeSuffix);
             $this->initializeCurlPostFieldOptions();
             $this->setRequestOption(CURLOPT_POSTFIELDS, json_encode(
-                $data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+                $data,
+                JSON_UNESCAPED_SLASHES
+                    | JSON_UNESCAPED_UNICODE
+                    | JSON_PRESERVE_ZERO_FRACTION
             ));
         } else {
             throw new WebClientException(

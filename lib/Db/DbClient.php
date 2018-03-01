@@ -233,9 +233,7 @@ class DbClient {
      * @return int
      */
     public static function execute($sql, $params = null) {
-        return static::getEngine()->execute(
-            $sql, $params
-        );
+        return static::getEngine()->execute($sql, $params);
     }
 
     /**

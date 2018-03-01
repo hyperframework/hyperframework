@@ -170,7 +170,9 @@ class DbOperationProfiler extends DbOperationEventListener {
                 ) {
                     $log .= ' | params: ' . json_encode(
                         $profile['params'],
-                        JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+                        JSON_UNESCAPED_SLASHES
+                            | JSON_UNESCAPED_UNICODE
+                            | JSON_PRESERVE_ZERO_FRACTION
                     );
                 }
             } else {
