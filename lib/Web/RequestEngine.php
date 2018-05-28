@@ -16,7 +16,7 @@ class RequestEngine {
         if ($this->method !== null) {
             return $this->method;
         }
-        $overriddenMethod = $this->getHeader('X_HTTP_METHOD_OVERRIDE');
+        $overriddenMethod = $this->getHeader('X-HTTP-Method-Override');
         if ($overriddenMethod !== null) {
             $this->method = strtoupper($overriddenMethod);
         } else {
@@ -67,6 +67,7 @@ class RequestEngine {
      */
     public function getHeader($name, $default = null) {
         $headers = $this->getHeaders();
+        $name = strtoupper($name);
         return isset($headers[$name]) ? $headers[$name] : $default;
     }
 
@@ -89,13 +90,13 @@ class RequestEngine {
         if (function_exists('getallheaders')) {
             $headers = getallheaders();
             foreach ($headers as $name => $value) {
-                $name = strtoupper(str_replace('-', '_', $name));
+                $name = strtoupper($name);
                 $this->headers[$name] = $value;
             }
         } else {
             foreach ($_SERVER as $name => $value) {
                 if (substr($name, 0, 5) === 'HTTP_') {
-                    $name = substr($name, 5);
+                    $name = str_replace('_', '-', substr($name, 5));
                     $this->headers[$name] = $value;
                 }
             }
@@ -198,7 +199,7 @@ class RequestEngine {
      */
     private function initializeBodyParams() {
         $this->bodyParams = [];
-        $contentType = $this->getHeader('CONTENT_TYPE');
+        $contentType = $this->getHeader('Content-Type');
         if ($contentType === null) {
             $contentType = Config::getString(
                 'hyperframework.web.default_request_content_type'
