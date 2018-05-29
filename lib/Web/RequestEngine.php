@@ -76,6 +76,7 @@ class RequestEngine {
      * @return bool
      */
     public function hasHeader($name) {
+        $name = strtolower($name);
         return isset($this->getHeaders()[$name]);
     }
 
