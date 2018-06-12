@@ -18,7 +18,7 @@ class RequestEngine {
         }
         $overriddenMethod = $this->getHeader('X-HTTP-Method-Override');
         if ($overriddenMethod !== null) {
-            $this->method = strtolower($overriddenMethod);
+            $this->method = strtoupper($overriddenMethod);
         } else {
             $overriddenMethod = $this->getBodyParam('_method');
             if ($overriddenMethod !== null) {
