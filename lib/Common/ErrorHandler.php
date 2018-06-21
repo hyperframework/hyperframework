@@ -23,6 +23,21 @@ class ErrorHandler {
     }
 
     /**
+     * @return object
+     */
+    public function getError() {
+        return $this->error;
+    }
+
+    /**
+     * @param object $error
+     * @return void
+     */
+    public function setError($error) {
+        $this->error = $error;
+    }
+
+    /**
      * @return void
      */
     protected function handle() {
@@ -88,13 +103,6 @@ class ErrorHandler {
     }
 
     /**
-     * @return object
-     */
-    protected function getError() {
-        return $this->error;
-    }
-
-    /**
      * @return void
      */
     private function registerExceptionHandler() {
@@ -133,7 +141,7 @@ class ErrorHandler {
      */
     private function handleException($exception) {
         if ($this->getError() === null) {
-            $this->error = $exception;
+            $this->setError($exception);
             $this->handle();
         }
         throw $exception;
@@ -174,9 +182,9 @@ class ErrorHandler {
                 E_ALL & ~(E_DEPRECATED | E_USER_DEPRECATED);
         }
         if (($type & $errorExceptionBitmask) === 0) {
-            $this->error = new Error($type, $message, $file, $line);
+            $this->setError(new Error($type, $message, $file, $line));
             $this->handle();
-            $this->error = null;
+            $this->setError(null);
             return false;
         }
         throw new ErrorException(
@@ -198,12 +206,12 @@ class ErrorHandler {
         if (in_array($error['type'], [
             E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR
         ])) {
-            $this->error = new Error(
+            $this->setError(new Error(
                 $error['type'],
                 $error['message'],
                 $error['file'],
                 $error['line']
-            );
+            ));
             $this->handle();
         }
     }

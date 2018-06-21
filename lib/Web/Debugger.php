@@ -26,8 +26,8 @@ class Debugger {
                 $this->trace = $error->getTrace();
             }
         }
-        if (headers_sent() === false) {
-            header('Content-Type: text/html;charset=utf-8');
+        if (Response::headersSent() === false) {
+            Response::setHeader('Content-Type: text/html; charset=utf-8');
         }
         if ($this->error instanceof Error) {
             $type = htmlspecialchars(
@@ -45,12 +45,16 @@ class Debugger {
             );
             $title .= ': ' . $message;
         }
-        echo '<!DOCTYPE html><html><head><meta http-equiv="Content-Type"',
-            ' content="text/html;charset=utf-8"/><title>', $title, '</title>';
+        Response::write(
+            '<!DOCTYPE html><html><head><meta http-equiv="Content-Type"'
+                . ' content="text/html;charset=utf-8"/><title>'
+                . $title
+                . '</title>'
+        );
         $this->renderCss();
-        echo '</head><body><table class="page-container"><tbody>';
+        Response::write('</head><body><table class="page-container"><tbody>');
         $this->renderContent($type, $message);
-        echo '</tbody></table></body></html>';
+        Response::write('</tbody></table></body></html>');
     }
 
     /**
@@ -59,22 +63,24 @@ class Debugger {
      * @return void
      */
     private function renderContent($type, $message) {
-        echo '<tr><td class="content-wrapper"><table class="content"><tbody>';
+        Response::write(
+            '<tr><td class="content-wrapper"><table class="content"><tbody>'
+        );
         $this->renderErrorHeader($type, $message);
-        echo '<tr><td class="file-wrapper">';
+        Response::write('<tr><td class="file-wrapper">');
         $this->renderFile();
-        echo '</td></tr>';
+        Response::write('</td></tr>');
         if ($this->trace !== null && count($this->trace) > 0) {
-            echo '<tr><td class="stack-trace-wrapper">';
+            Response::write('<tr><td class="stack-trace-wrapper">');
             $this->renderStackTrace();
-            echo '</td></tr>';
+            Response::write('</td></tr>');
         }
         if (strlen($this->output) > 0) {
-            echo '<tr><td class="output-wrapper">';
+            Response::write('<tr><td class="output-wrapper">');
             $this->renderOutput();
-            echo '</td></tr>';
+            Response::write('</td></tr>');
         }
-        echo '</tbody></table></td></tr>';
+        Response::write('</tbody></table></td></tr>');
     }
 
     /**
@@ -86,23 +92,23 @@ class Debugger {
         if ($this->error instanceof Error === false) {
             $type = str_replace('\\', '<span>\</span>', $type);
         }
-        echo '<tr><td class="header"><h1>', $type, '</h1>';
+        Response::write('<tr><td class="header"><h1>' . $type . '</h1>');
         $message = trim($message);
         if ($message !== '') {
-            echo '<div class="message">', $message, '</div>';
+            Response::write('<div class="message">' . $message . '</div>');
         }
-        echo '</td></tr>';
+        Response::write('</td></tr>');
     }
 
     /**
      * @return void
      */
     private function renderFile() {
-        echo '<div class="file"><h2>File</h2>';
+        Response::write('<div class="file"><h2>File</h2>');
         $path = $this->error->getFile();
         $errorLineNumber = $this->error->getLine();
         $this->renderFileContent($path, $errorLineNumber);
-        echo '</div>';
+        Response::write('</div>');
     }
 
     /**
@@ -114,58 +120,75 @@ class Debugger {
         $this->renderPath(
             $path, ' <span class="line">' . $errorLineNumber . '</span>'
         );
-        echo '<div class="content"><table><tbody><tr>',
-            '<td class="index"><div class="index-content">';
+        Response::write(
+            '<div class="content"><table><tbody><tr>'
+                . '<td class="index"><div class="index-content">'
+        );
         $lines = $this->getLines($path, $errorLineNumber);
         foreach ($lines as $number => $line) {
             if ($number === $errorLineNumber) {
-                echo '<div class="error-line-number"><div>',
-                    $number, '</div></div>';
+                Response::write(
+                    '<div class="error-line-number"><div>'
+                        . $number . '</div></div>'
+                );
             } else {
-                echo '<div class="line-number"><div>', $number, '</div></div>';
+                Response::write(
+                    '<div class="line-number"><div>' . $number . '</div></div>'
+                );
             }
         }
-        echo "</div></td><td><pre>\n";
+        Response::write("</div></td><td><pre>\n");
         foreach ($lines as $number => $line) {
             if ($number === $errorLineNumber) {
-                echo '<span class="error-line">', $line , "\n</span>";
+                Response::write(
+                    '<span class="error-line">' . $line . "\n</span>"
+                );
             } else {
-                echo $line , "\n";
+                Response::write($line . "\n");
             }
         }
-        echo '</pre></td></tr></tbody></table></div>';
+        Response::write('</pre></td></tr></tbody></table></div>');
     }
 
     /**
      * @return void
      */
     private function renderStackTrace() {
-        echo '<table class="stack-trace"><tr><td class="content">',
-            '<h2>Stack Trace</h2><table><tbody>';
+        Response::write(
+            '<table class="stack-trace"><tr><td class="content">'
+                . '<h2>Stack Trace</h2><table><tbody>'
+        );
         $index = 0;
         $last = count($this->trace) - 1;
         foreach ($this->trace as $frame) {
             if ($frame !== '{main}') {
                 $invocation = StackTraceFormatter::formatInvocation($frame);
-                echo '<tr><td class="index">', $index, '</td><td class="value';
+                Response::write(
+                    '<tr><td class="index">' . $index . '</td><td class="value'
+                );
                 if ($index === $last) {
-                    echo ' last';
+                    Response::write(' last');
                 }
-                echo '"><div class="frame"><div class="position">';
+                Response::write('"><div class="frame"><div class="position">');
                 if (isset($frame['file'])) {
                     $this->renderPath(
                         $frame['file'],
                         ' <span class="line">' . $frame['line'] . '</span>'
                     );
                 } else {
-                    echo '<span class="internal">internal function</span>';
+                    Response::write(
+                        '<span class="internal">internal function</span>'
+                    );
                 }
-                echo '</div><div class="invocation"><code>', $invocation,
-                    '</code></div></div></td></tr>';
+                Response::write(
+                    '</div><div class="invocation"><code>'
+                        . $invocation
+                        . '</code></div></div></td></tr>'
+                );
             }
             ++$index;
         }
-        echo '</tbody></table></td></tr></table>';
+        Response::write('</tbody></table></td></tr></table>');
     }
 
     /**
@@ -281,13 +304,12 @@ class Debugger {
                 $class = 'html';
                 break;
             default:
-                $class = 'keyword';
-        }
+                $class = 'keyword'; }
         $content = htmlspecialchars(
             $content, ENT_NOQUOTES | ENT_HTML401 | ENT_SUBSTITUTE
         );
         if ($class === null) {
-            return $content; 
+            return $content;
         }
         return '<span class="' . $class . '">' . $content . '</span>';
     }
@@ -298,23 +320,33 @@ class Debugger {
      * @return void
      */
     private function renderPath($path, $suffix = '') {
-        echo '<div class="path"><code>', $path, '</code>', $suffix, '</div>';
+        Response::write(
+            '<div class="path"><code>' . $path . '</code>' . $suffix . '</div>'
+        );
     }
 
     private function renderOutput() {
         $length = strlen($this->output);
-        echo '<table class="output"><tbody><tr><td><h2>Output</h2>',
-            '<div class="size-wrapper"><div>Size: <span>', $length;
+        Response::write(
+            '<table class="output"><tbody><tr><td><h2>Output</h2>'
+                . '<div class="size-wrapper"><div>Size: <span>'
+                . $length
+        );
         if ($length > 1) {
-            echo ' bytes';
+            Response::write(' bytes');
         } else {
-            echo ' byte';
+            Response::write(' byte');
         }
-        echo '</span></div></div><div class="content"><pre>',
-            htmlspecialchars($this->output),
-            '</pre></div></td></tr></tbody></table>';
+        Response::write(
+            '</span></div></div><div class="content"><pre>'
+                . htmlspecialchars($this->output)
+                . '</pre></div></td></tr></tbody></table>'
+        );
     }
 
+    /**
+     * @return void
+     */
     private function renderCss() {
         ob_start();
         ?><style>
@@ -557,6 +589,6 @@ class Debugger {
             ob_get_contents()
         );
         ob_end_clean();
-        echo $css;
+        Response::write($css);
     }
 }

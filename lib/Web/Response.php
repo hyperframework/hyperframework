@@ -72,6 +72,14 @@ class Response {
     }
 
     /**
+     * @param string $data
+     * @return void
+     */
+    public static function write($data) {
+        return static::getEngine()->write($data);
+    }
+
+    /**
      * @return ResponseEngine
      */
     public static function getEngine() {

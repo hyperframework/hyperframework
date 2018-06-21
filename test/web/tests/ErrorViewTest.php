@@ -16,7 +16,6 @@ class ErrorViewTest extends Base {
         Config::set(
             'hyperframework.web.error_view.root_path', 'invalid'
         );
-        $this->expectOutputString('404 not found');
         $engine = $this->getMock('Hyperframework\Web\ResponseEngine');
         $engine->expects($this->once())->method('setHeader')->with(
             'Content-Type: text/plain; charset=utf-8'

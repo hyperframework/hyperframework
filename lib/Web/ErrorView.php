@@ -42,9 +42,9 @@ class ErrorView {
         }
         if ($path === null) {
             Response::setHeader('Content-Type: text/plain; charset=utf-8');
-            echo $statusCode;
+            Response::write($statusCode);
             if ((string)$statusReasonPhrase !== '') {
-                echo ' ', $statusReasonPhrase;
+                Response::write(' ' . $statusReasonPhrase);
             }
         } else {
             $view = ViewFactory::createView([

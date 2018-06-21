@@ -97,4 +97,12 @@ class ResponseEngine {
     public function headersSent() {
         return headers_sent();
     }
+
+    /**
+     * @param string $data
+     * @return void
+     */
+    public function write($data) {
+        echo $data;
+    }
 }
