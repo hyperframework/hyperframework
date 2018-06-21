@@ -39,9 +39,17 @@ class App extends Base {
                     );
                 }
             }
-            $this->router = new $class;
+            $this->setRouter(new $class);
         }
         return $this->router;
+    }
+
+    /**
+     * @param Router
+     * @return void
+     */
+    public function setRouter($router) {
+        $this->router = $router;
     }
 
     /**
