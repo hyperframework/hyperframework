@@ -14,8 +14,8 @@ class ErrorHandler extends Base {
             Config::getBool('hyperframework.web.debugger.enable', false);
         if ($this->isDebuggerEnabled) {
             ob_start();
-            $this->startupOutputBufferLevel = ob_get_level();
         }
+        $this->startupOutputBufferLevel = ob_get_level();
     }
 
     /**
