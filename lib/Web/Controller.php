@@ -331,7 +331,7 @@ abstract class Controller {
         if (Config::getBool(
             'hyperframework.web.initialize_global_post_data', false
         )) {
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (Request::getMethod() === 'POST') {
                 $_POST = $this->getBodyParams();
             }
         }
