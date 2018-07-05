@@ -100,14 +100,25 @@ abstract class Router {
     }
 
     /**
+     * @param RouteCollection $routes
      * @return void
      */
-    public function execute() {
-        $routes = new RouteCollection;
-        $this->prepare($routes);
+    public function execute($routes = null) {
+        if ($routes === null) {
+            $routes = $this->buildRoutes();
+        }
         if ($this->matchRoutes($routes) === false) {
             $this->handleMatchFailed();
         }
+    }
+
+    /**
+     * @return RouteCollection
+     */
+    public function buildRoutes() {
+        $routes = new RouteCollection;
+        $this->prepare($routes);
+        return $routes;
     }
 
     /**
