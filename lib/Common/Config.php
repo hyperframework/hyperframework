@@ -106,15 +106,6 @@ class Config {
 
     /**
      * @param string $name
-     * @param mixed $value
-     * @return void
-     */
-    public static function setDefault($name, $value) {
-        static::getEngine()->setDefault($name, $value);
-    }
-
-    /**
-     * @param string $name
      * @return bool
      */
     public static function has($name) {

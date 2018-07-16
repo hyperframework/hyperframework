@@ -217,17 +217,6 @@ class ConfigEngine {
 
     /**
      * @param string $name
-     * @param mixed $value
-     * @return void
-     */
-    public function setDefault($name, $value) {
-        if ($this->has($name)) {
-            $this->import([$name => $value]);
-        }
-    }
-
-    /**
-     * @param string $name
      * @return bool
      */
     public function has($name) {
