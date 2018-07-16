@@ -28,9 +28,8 @@ class ErrorHandler extends Base {
             return;
         }
         if ($this->isDebuggerEnabled) {
-            $this->flushInnerOutputBuffer();
             $output = $this->getOutput();
-            $this->deleteOutputBuffer();
+            $this->deleteOutput();
             if (Response::headersSent() === false) {
                 $this->rewriteHttpHeaders();
             }
@@ -39,7 +38,7 @@ class ErrorHandler extends Base {
         } elseif (Response::headersSent() === false) {
             $this->rewriteHttpHeaders();
             if (Config::getBool('hyperframework.web.error_view.enable', true)) {
-                $this->deleteOutputBuffer();
+                $this->deleteOutput();
                 $this->renderErrorView();
                 ini_set('display_errors', '0');
             }
@@ -94,12 +93,31 @@ class ErrorHandler extends Base {
     /**
      * @return string
      */
-    private function getOutput() {
+    protected function getOutput() {
+        $this->flushInnerOutputBuffer();
         $content = ob_get_contents();
         if ($content === false) {
             return;
         }
         return $content;
+    }
+
+    /**
+     * @return void
+     */
+    protected function deleteOutput() {
+        $level = ob_get_level();
+        $startupLevel = $this->startupOutputBufferLevel;
+        while ($level >= $startupLevel) {
+            if ($startupLevel === $level) {
+                if ($level !== 0) {
+                    ob_clean();
+                }
+            } else {
+                ob_end_clean();
+            }
+            --$level;
+        }
     }
 
     /**
@@ -113,24 +131,6 @@ class ErrorHandler extends Base {
         }
         while ($level > $startupLevel) {
             ob_end_flush();
-            --$level;
-        }
-    }
-
-    /**
-     * @return void
-     */
-    private function deleteOutputBuffer() {
-        $level = ob_get_level();
-        $startupLevel = $this->startupOutputBufferLevel;
-        while ($level >= $startupLevel) {
-            if ($startupLevel === $level) {
-                if ($level !== 0) {
-                    ob_clean();
-                }
-            } else {
-                ob_end_clean();
-            }
             --$level;
         }
     }
