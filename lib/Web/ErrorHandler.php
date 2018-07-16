@@ -13,6 +13,7 @@ class ErrorHandler extends Base {
         $this->isDebuggerEnabled =
             Config::getBool('hyperframework.web.debugger.enable', false);
         if ($this->isDebuggerEnabled) {
+            ini_set('display_errors', '0');
             ob_start();
         }
         $this->startupOutputBufferLevel = ob_get_level();
@@ -34,13 +35,11 @@ class ErrorHandler extends Base {
                 $this->rewriteHttpHeaders();
             }
             $this->executeDebugger($output);
-            ini_set('display_errors', '0');
         } elseif (Response::headersSent() === false) {
             $this->rewriteHttpHeaders();
             if (Config::getBool('hyperframework.web.error_view.enable', true)) {
                 $this->deleteOutput();
                 $this->renderErrorView();
-                ini_set('display_errors', '0');
             }
         }
     }
