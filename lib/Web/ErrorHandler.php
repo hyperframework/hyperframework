@@ -6,13 +6,10 @@ use Hyperframework\Common\Error;
 use Hyperframework\Common\ErrorHandler as Base;
 
 class ErrorHandler extends Base {
-    private $isDebuggerEnabled;
     private $startupOutputBufferLevel;
 
     public function __construct() {
-        $this->isDebuggerEnabled =
-            Config::getBool('hyperframework.web.debugger.enable', false);
-        if ($this->isDebuggerEnabled) {
+        if ($this->isDebuggerEnabled()) {
             ini_set('display_errors', '0');
             ob_start();
         }
@@ -28,7 +25,7 @@ class ErrorHandler extends Base {
         if ($error instanceof Error && $error->isFatal() === false) {
             return;
         }
-        if ($this->isDebuggerEnabled) {
+        if ($this->isDebuggerEnabled()) {
             $output = $this->getOutput();
             $this->deleteOutput();
             if (Response::headersSent() === false) {
@@ -147,5 +144,12 @@ class ErrorHandler extends Base {
         } else {
             Response::setHeader('HTTP/1.1 500 Internal Server Error');
         }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isDebuggerEnabled() {
+        return Config::getBool('hyperframework.web.debugger.enable', false);
     }
 }
