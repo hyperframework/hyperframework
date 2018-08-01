@@ -30,14 +30,6 @@ class ErrorHandler {
     }
 
     /**
-     * @param object $error
-     * @return void
-     */
-    public function setError($error) {
-        $this->error = $error;
-    }
-
-    /**
      * @return void
      */
     protected function handle() {
@@ -100,6 +92,14 @@ class ErrorHandler {
             return substr($log, 0, $maxLength);
         }
         return $log;
+    }
+
+    /**
+     * @param object $error
+     * @return void
+     */
+    protected function setError($error) {
+        $this->error = $error;
     }
 
     /**
