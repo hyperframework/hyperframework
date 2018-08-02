@@ -138,11 +138,12 @@ class ErrorHandler extends Base {
         Response::removeHeaders();
         $error = $this->getError();
         if ($error instanceof HttpException) {
+            Response::setStatusCode($error->getStatusCode());
             foreach ($error->getHttpHeaders() as $header) {
                 Response::setHeader($header);
             }
         } else {
-            Response::setHeader('HTTP/1.1 500 Internal Server Error');
+            Response::setStatusCode(500);
         }
     }
 

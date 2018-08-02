@@ -49,6 +49,6 @@ abstract class HttpException extends Exception {
      * @return array
      */
     public function getHttpHeaders() {
-        return ['HTTP/1.1 ' . $this->getStatus()];
+        return [];
     }
 }

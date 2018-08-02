@@ -39,7 +39,7 @@ class App extends Base {
                     );
                 }
             }
-            $this->router = $router;
+            $this->router = new $class;
         }
         return $this->router;
     }
